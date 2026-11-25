@@ -131,7 +131,7 @@ function field(f, obj, base) {
   if (f.t === 'list') {
     const arr = Array.isArray(v) ? v : [];
     return '<div class="f' + (f.gallery ? ' gal" data-gallery="' + path : '') + '"><span class="lab">' + esc(f.label) + ' (' + arr.length + ')</span>' +
-      (f.gallery ? '<small>Adicione quantas fotos e vídeos quiser. Eles aparecem nesta ordem, um embaixo do outro. Dá para arrastar vários arquivos de uma vez para esta área.</small>' : '') + arr.map((it, j) =>
+      (f.gallery ? '<small>Adicione quantas fotos e vídeos quiser. Eles aparecem nesta ordem, um embaixo do outro. Para adicionar vários de uma vez, arraste todos juntos para qualquer lugar desta página do editor.</small>' : '') + arr.map((it, j) =>
       '<div class="item"><div class="hd"><strong>' + (j + 1) + '. ' + esc(String(it.title || it.label || it.caption || (f.gallery ? (isVideoUrl(it.url || '') ? 'Vídeo' : it.url ? 'Foto' : 'Vazio') : '')).replace(/\*/g, '')) + '</strong>' +
       '<button class="ico" data-a="iup" data-p="' + path + '" data-j="' + j + '" aria-label="Subir">↑</button><button class="ico" data-a="idown" data-p="' + path + '" data-j="' + j + '" aria-label="Descer">↓</button><button class="ico" data-a="idel" data-p="' + path + '" data-j="' + j + '" aria-label="Remover">✕</button></div>' +
       f.fields.map(sf => field(sf, it, path + '.' + j + '.')).join('') + '</div>').join('') +
@@ -194,30 +194,43 @@ app.addEventListener('click', e => {
 });
 
 // ---------- arrastar e soltar arquivos
-const dropBox = e => e.target.closest && (e.target.closest('.mf[data-drop]') || e.target.closest('.gal[data-gallery]'));
 const okType = (file, accept) => accept.split(',').some(a => file.type.startsWith(a.replace('*', '')));
 const hasFiles = e => e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
+// quantos arquivos estão sendo arrastados (durante o arrasto o navegador só informa a quantidade)
+const fileCount = e => Array.from((e.dataTransfer && e.dataTransfer.items) || []).filter(i => i.kind === 'file').length;
+// onde o arquivo vai cair: com vários arquivos, sempre na galeria da página
+function dropBox(e) {
+  const t = e.target.closest ? e.target : e.target.parentElement; if (!t) return null;
+  if (fileCount(e) > 1 || (e.type === 'drop' && e.dataTransfer.files.length > 1)) {
+    if (!t.closest('#form')) return null;
+    return t.closest('.gal[data-gallery]') || document.querySelector('#form .gal[data-gallery]') || t.closest('.mf[data-drop]');
+  }
+  return t.closest('.mf[data-drop]') || t.closest('.gal[data-gallery]');
+}
+const clearOver = keep => document.querySelectorAll('.over').forEach(b => { if (b !== keep) b.classList.remove('over'); });
 addEventListener('dragover', e => {
   if (!hasFiles(e)) return;
   e.preventDefault(); // evita que o navegador abra o arquivo ao soltar fora da caixa
   const box = dropBox(e);
   e.dataTransfer.dropEffect = box ? 'copy' : 'none';
-  document.querySelectorAll('.mf.over').forEach(b => { if (b !== box) b.classList.remove('over'); });
+  clearOver(box);
   if (box) box.classList.add('over');
 });
-addEventListener('dragleave', e => { const box = dropBox(e); if (box && !box.contains(e.relatedTarget)) box.classList.remove('over'); });
+addEventListener('dragleave', e => { if (!e.relatedTarget) clearOver(); });
 addEventListener('drop', e => {
   if (!hasFiles(e)) return;
   e.preventDefault();
-  document.querySelectorAll('.mf.over').forEach(b => b.classList.remove('over'));
+  clearOver();
   const box = dropBox(e); if (!box) return;
-  if (box.dataset.gallery) { uploadMany(Array.from(e.dataTransfer.files), box.dataset.gallery, box); return; }
-  const file = e.dataTransfer.files[0]; if (!file) return;
+  const files = Array.from(e.dataTransfer.files); if (!files.length) return;
+  if (box.dataset.gallery) { uploadMany(files, box.dataset.gallery, box); return; }
+  // vários arquivos num campo de 1 arquivo só (ex.: capa, que não tem galeria)
+  const file = files[0];
   if (!okType(file, box.dataset.accept)) { const a = box.dataset.accept; toast(a.includes(',') ? 'Este campo aceita foto ou vídeo.' : a.startsWith('video') ? 'Este campo aceita apenas vídeo.' : 'Este campo aceita apenas imagem.', 5000); return; }
-  upload(file, box.dataset.drop, box, !!box.closest('[data-root]'));
+  upload(file, box.dataset.drop, box, !!box.closest('[data-root]'), null, files.length > 1 ? ' (Este campo aceita só 1 arquivo: enviei apenas "' + file.name + '".)' : '');
 });
 
-function upload(file, path, box, rootLevel, onDone) {
+function upload(file, path, box, rootLevel, onDone, note = '') {
   const target = rootLevel ? plan : plan.pages[sel];
   const isV = file.type.startsWith('video/'), isI = file.type.startsWith('image/');
   if (!isV && !isI) { toast('Escolha uma imagem ou um vídeo.'); return; }
@@ -234,7 +247,7 @@ function upload(file, path, box, rootLevel, onDone) {
       if (onDone) onDone(url); else setAt(target, path, url);
       setDirty(true);
       const y = scrollY; drawLeft(); drawPreview(); scrollTo(0, y);
-      if (!onDone) toast('Arquivo enviado. Clique em "Salvar alterações" para publicar.', 5000);
+      if (!onDone) toast('Arquivo enviado. Clique em "Salvar alterações" para publicar.' + note, note ? 8000 : 5000);
     });
   return task;
 }
