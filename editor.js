@@ -1,5 +1,5 @@
 import { DEFAULT_PLAN } from './data.js?v=2';
-import { renderOne, applyTheme, esc, ICON_NAMES, KIND_LABELS, safeUrl } from './render.js?v=2';
+import { renderOne, applyTheme, esc, ICON_NAMES, KIND_LABELS, safeUrl, isVideoUrl } from './render.js?v=3';
 import { firebaseConfig, PLAN_DOC, SDK } from './config.js?v=2';
 
 const { initializeApp } = await import(SDK + 'firebase-app.js');
@@ -18,6 +18,8 @@ const T = (k, label, hint) => ({ k, t: 'text', label, hint });
 const TA = (k, label, hint) => ({ k, t: 'area', label, hint });
 const IMG = (k, label) => ({ k, t: 'media', accept: 'image/*', label });
 const VID = (k, label) => ({ k, t: 'media', accept: 'video/*', label: label || 'Vídeo da página (opcional)', video: true });
+const ANY = (k, label) => ({ k, t: 'media', accept: 'image/*,video/*', label, any: true });
+const GAL = { k: 'gallery', t: 'list', gallery: true, label: 'Galeria de fotos e vídeos', add: { url: '', caption: '' }, fields: [ANY('url', 'Foto ou vídeo'), T('caption', 'Legenda (opcional)')] };
 const ICONF = { k: 'icon', t: 'icon', label: 'Ícone' };
 const HL = 'Use *asteriscos* para destacar palavras em azul. Ex.: Nossa história é construída *todos os dias.*';
 const SCHEMA = {
@@ -25,18 +27,18 @@ const SCHEMA = {
   story: [T('badge', 'Etiqueta (canto superior)'), T('eyebrow', 'Sobretítulo'), T('title', 'Título', HL), TA('text', 'Texto', 'Deixe uma linha em branco para separar parágrafos.'),
     IMG('image', 'Foto (opcional)'), T('imageCaption', 'Legenda da foto'), VID('video'),
     { k: 'items', t: 'list', label: 'Cards', add: { icon: 'star', title: 'Novo card', text: '' }, fields: [ICONF, T('title', 'Título'), TA('text', 'Texto')] },
-    T('quote', 'Frase de destaque (caixa azul)')],
+    T('quote', 'Frase de destaque (caixa azul)'), GAL],
   stats: [T('badge', 'Etiqueta'), T('eyebrow', 'Sobretítulo'), T('title', 'Título', HL), TA('text', 'Texto'), VID('video'),
     { k: 'items', t: 'list', label: 'Indicadores (o 1º fica em destaque)', add: { icon: 'target', value: '0', label: 'Novo indicador', note: '' }, fields: [ICONF, T('value', 'Número'), T('label', 'Descrição'), T('note', 'Observação (opcional)')] },
-    T('note', 'Aviso no rodapé (opcional)')],
+    T('note', 'Aviso no rodapé (opcional)'), GAL],
   plan: [T('badge', 'Etiqueta'), T('title', 'Nome do plano'), { k: 'tier', t: 'select', label: 'Cor do cartão', opts: { sky: 'Azul', red: 'Vermelho', navy: 'Azul-marinho', orange: 'Laranja' } },
     { k: 'stars', t: 'select', label: 'Estrelas', opts: { 0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5' } }, T('monthly', 'Investimento mensal'), T('annual', 'Investimento anual'), T('ctaLabel', 'Texto do botão do WhatsApp', 'Padrão: Contrate agora. O botão usa o telefone da página Contato.'), VID('video'),
-    { k: 'items', t: 'list', label: 'Benefícios', add: { icon: 'check', title: 'Novo benefício', text: '' }, fields: [ICONF, T('title', 'Benefício'), TA('text', 'Descrição')] }],
+    { k: 'items', t: 'list', label: 'Benefícios', add: { icon: 'check', title: 'Novo benefício', text: '' }, fields: [ICONF, T('title', 'Benefício'), TA('text', 'Descrição')] }, GAL],
   benefit: [T('badge', 'Etiqueta'), T('number', 'Numeração (ex.: Benefício 01)'), ICONF, T('subtitle', 'Subtítulo'), T('title', 'Título', HL), TA('text', 'Texto'),
     { k: 'plans', t: 'plans', label: 'Disponível nos planos', hint: 'Escreva o detalhe (ex.: 6 meses) ou "Incluso". Deixe vazio se o plano não tem.' },
-    VID('video'), IMG('image', 'Foto ou arte (opcional)'), T('format', 'Formato (ex.: Stories 1080 × 1920)')],
-  contact: [T('badge', 'Etiqueta'), T('title', 'Título', HL), TA('text', 'Texto'), T('name', 'Nome'), T('role', 'Cargo'), T('phone', 'Telefone / WhatsApp'), T('email', 'E-mail'), IMG('photo', 'Foto da pessoa (opcional)'), VID('video')],
-  closing: [T('title', 'Título'), T('subtitle', 'Subtítulo', HL), TA('text', 'Agradecimento'), VID('video')],
+    VID('video'), IMG('image', 'Foto ou arte (opcional)'), T('format', 'Formato (ex.: Stories 1080 × 1920)'), GAL],
+  contact: [T('badge', 'Etiqueta'), T('title', 'Título', HL), TA('text', 'Texto'), T('name', 'Nome'), T('role', 'Cargo'), T('phone', 'Telefone / WhatsApp'), T('email', 'E-mail'), IMG('photo', 'Foto da pessoa (opcional)'), VID('video'), GAL],
+  closing: [T('title', 'Título'), T('subtitle', 'Subtítulo', HL), TA('text', 'Agradecimento'), VID('video'), GAL],
 };
 const NEW = {
   story: { badge: 'Nova seção', eyebrow: '', title: 'Novo *título*', text: 'Escreva o texto aqui.', image: '', imageCaption: '', video: '', items: [], quote: '' },
@@ -117,21 +119,25 @@ function field(f, obj, base) {
     [['essencial', 'Essencial'], ['premium', 'Premium'], ['master', 'Master']].map(([k, n]) => '<div class="f"><label for="' + id + k + '">' + n + '</label><input type="text" id="' + id + k + '" data-p="' + path + '.' + k + '" value="' + esc(pl[k]) + '" placeholder="não incluso"></div>').join('') + '</div></div>'; }
   if (f.t === 'media') {
     const u = safeUrl(v);
-    const prev = !u ? '<small>Nenhum arquivo.</small>' : (f.video ? (/youtu/.test(u) ? '<small>YouTube: ' + esc(u) + '</small>' : '<video class="thumb" src="' + esc(u) + '" controls playsinline preload="metadata"></video>') : '<img class="thumb" src="' + esc(u) + '" alt="">');
+    const vid = f.video || (f.any && isVideoUrl(u));
+    const prev = !u ? '<small>Nenhum arquivo.</small>' : (vid ? (/youtu/.test(u) ? '<small>YouTube: ' + esc(u) + '</small>' : '<video class="thumb" src="' + esc(u) + '" controls playsinline preload="metadata"></video>') : '<img class="thumb" src="' + esc(u) + '" alt="">');
     return '<div class="f"><span class="lab">' + esc(f.label) + '</span><div class="mf" data-drop="' + path + '" data-accept="' + f.accept + '">' + prev +
-      '<small class="drophint">Arraste ' + (f.video ? 'um vídeo' : 'uma imagem') + ' para cá ou use o botão abaixo.</small>' +
+      '<small class="drophint">Arraste ' + (f.any ? 'uma foto ou um vídeo' : f.video ? 'um vídeo' : 'uma imagem') + ' para cá ou use o botão abaixo.</small>' +
       '<div class="bar2" hidden><i></i></div><div class="row">' +
       '<label class="b s" style="cursor:pointer">Enviar arquivo<input type="file" hidden accept="' + f.accept + '" data-up="' + path + '"></label>' +
       (u ? '<button class="b s r" data-a="clearMedia" data-p="' + path + '">Remover</button>' : '') + '</div>' +
-      '<input type="text" data-p="' + path + '" value="' + esc(v) + '" placeholder="' + (f.video ? 'ou cole um link https (YouTube ou .mp4)' : 'ou cole um link https da imagem') + '" aria-label="Link do arquivo"></div></div>';
+      '<input type="text" data-p="' + path + '" value="' + esc(v) + '" placeholder="' + (f.video || f.any ? 'ou cole um link https (YouTube, .mp4 ou imagem)' : 'ou cole um link https da imagem') + '" aria-label="Link do arquivo"></div></div>';
   }
   if (f.t === 'list') {
     const arr = Array.isArray(v) ? v : [];
-    return '<div class="f"><span class="lab">' + esc(f.label) + ' (' + arr.length + ')</span>' + arr.map((it, j) =>
-      '<div class="item"><div class="hd"><strong>' + (j + 1) + '. ' + esc(String(it.title || it.label || '').replace(/\*/g, '')) + '</strong>' +
+    return '<div class="f' + (f.gallery ? ' gal" data-gallery="' + path : '') + '"><span class="lab">' + esc(f.label) + ' (' + arr.length + ')</span>' +
+      (f.gallery ? '<small>Adicione quantas fotos e vídeos quiser. Eles aparecem nesta ordem, um embaixo do outro. Dá para arrastar vários arquivos de uma vez para esta área.</small>' : '') + arr.map((it, j) =>
+      '<div class="item"><div class="hd"><strong>' + (j + 1) + '. ' + esc(String(it.title || it.label || it.caption || (f.gallery ? (isVideoUrl(it.url || '') ? 'Vídeo' : it.url ? 'Foto' : 'Vazio') : '')).replace(/\*/g, '')) + '</strong>' +
       '<button class="ico" data-a="iup" data-p="' + path + '" data-j="' + j + '" aria-label="Subir">↑</button><button class="ico" data-a="idown" data-p="' + path + '" data-j="' + j + '" aria-label="Descer">↓</button><button class="ico" data-a="idel" data-p="' + path + '" data-j="' + j + '" aria-label="Remover">✕</button></div>' +
       f.fields.map(sf => field(sf, it, path + '.' + j + '.')).join('') + '</div>').join('') +
-      '<button class="b s" data-a="iadd" data-p="' + path + '" data-k="' + f.k + '">+ Adicionar</button></div>';
+      '<div class="bar2" hidden><i></i></div><div class="row">' +
+      (f.gallery ? '<label class="b s" style="cursor:pointer">+ Enviar fotos/vídeos<input type="file" hidden multiple accept="image/*,video/*" data-many="' + path + '"></label>' : '') +
+      '<button class="b s" data-a="iadd" data-p="' + path + '" data-k="' + f.k + '">' + (f.gallery ? '+ Adicionar por link' : '+ Adicionar') + '</button></div></div>';
   }
   return '';
 }
@@ -159,7 +165,8 @@ app.addEventListener('input', e => {
 });
 app.addEventListener('change', e => {
   const t = e.target;
-  if (t.dataset.up && t.files && t.files[0]) upload(t.files[0], t.dataset.up, t.closest('.mf'), !!t.closest('[data-root]'));
+  if (t.dataset.many && t.files && t.files.length) uploadMany(Array.from(t.files), t.dataset.many, t.closest('.gal'));
+  else if (t.dataset.up && t.files && t.files[0]) upload(t.files[0], t.dataset.up, t.closest('.mf'), !!t.closest('[data-root]'));
   else if (t.dataset.p && /(^|\.)(title|label)$/.test(t.dataset.p)) { const y = scrollY; drawLeft(); scrollTo(0, y); }
 });
 app.addEventListener('click', e => {
@@ -187,7 +194,8 @@ app.addEventListener('click', e => {
 });
 
 // ---------- arrastar e soltar arquivos
-const dropBox = e => e.target.closest && e.target.closest('.mf[data-drop]');
+const dropBox = e => e.target.closest && (e.target.closest('.mf[data-drop]') || e.target.closest('.gal[data-gallery]'));
+const okType = (file, accept) => accept.split(',').some(a => file.type.startsWith(a.replace('*', '')));
 const hasFiles = e => e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
 addEventListener('dragover', e => {
   if (!hasFiles(e)) return;
@@ -203,13 +211,14 @@ addEventListener('drop', e => {
   e.preventDefault();
   document.querySelectorAll('.mf.over').forEach(b => b.classList.remove('over'));
   const box = dropBox(e); if (!box) return;
+  if (box.dataset.gallery) { uploadMany(Array.from(e.dataTransfer.files), box.dataset.gallery, box); return; }
   const file = e.dataTransfer.files[0]; if (!file) return;
-  const wantVideo = box.dataset.accept.startsWith('video');
-  if (!file.type.startsWith(wantVideo ? 'video/' : 'image/')) { toast(wantVideo ? 'Este campo aceita apenas vídeo.' : 'Este campo aceita apenas imagem.', 5000); return; }
+  if (!okType(file, box.dataset.accept)) { const a = box.dataset.accept; toast(a.includes(',') ? 'Este campo aceita foto ou vídeo.' : a.startsWith('video') ? 'Este campo aceita apenas vídeo.' : 'Este campo aceita apenas imagem.', 5000); return; }
   upload(file, box.dataset.drop, box, !!box.closest('[data-root]'));
 });
 
-async function upload(file, path, box, rootLevel) {
+function upload(file, path, box, rootLevel, onDone) {
+  const target = rootLevel ? plan : plan.pages[sel];
   const isV = file.type.startsWith('video/'), isI = file.type.startsWith('image/');
   if (!isV && !isI) { toast('Escolha uma imagem ou um vídeo.'); return; }
   if (file.size > 300 * 1024 * 1024) { toast('Arquivo acima de 300 MB. Comprima antes de enviar.', 6000); return; }
@@ -222,10 +231,28 @@ async function upload(file, path, box, rootLevel) {
     () => { toast('Falha no envio. Confira se o Storage está ativado e as regras publicadas.', 7000); if (bar) bar.hidden = true; },
     async () => {
       const url = await S.getDownloadURL(task.snapshot.ref);
-      setAt(rootLevel ? plan : plan.pages[sel], path, url); setDirty(true);
+      if (onDone) onDone(url); else setAt(target, path, url);
+      setDirty(true);
       const y = scrollY; drawLeft(); drawPreview(); scrollTo(0, y);
-      toast('Arquivo enviado. Clique em "Salvar alterações" para publicar.', 5000);
+      if (!onDone) toast('Arquivo enviado. Clique em "Salvar alterações" para publicar.', 5000);
     });
+  return task;
+}
+
+// envia vários arquivos para a galeria, um de cada vez
+async function uploadMany(files, path, box) {
+  const ok = files.filter(f => okType(f, 'image/*,video/*'));
+  if (!ok.length) { toast('Escolha fotos ou vídeos.'); return; }
+  const page = plan.pages[sel];
+  let n = 0;
+  for (const file of ok) {
+    const task = upload(file, path, box && box.isConnected ? box : document.querySelector('.gal[data-gallery="' + path + '"]'), false, url => {
+      const arr = getAt(page, path) || []; arr.push({ url, caption: '' }); setAt(page, path, arr);
+    });
+    if (!task) continue;
+    try { await task; n++; } catch (e) { /* aviso já mostrado */ }
+  }
+  if (n) toast((n === 1 ? '1 arquivo enviado' : n + ' arquivos enviados') + ' para a galeria. Clique em "Salvar alterações" para publicar.', 5000);
 }
 
 async function save() {
