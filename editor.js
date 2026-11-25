@@ -118,7 +118,8 @@ function field(f, obj, base) {
   if (f.t === 'media') {
     const u = safeUrl(v);
     const prev = !u ? '<small>Nenhum arquivo.</small>' : (f.video ? (/youtu/.test(u) ? '<small>YouTube: ' + esc(u) + '</small>' : '<video class="thumb" src="' + esc(u) + '" controls playsinline preload="metadata"></video>') : '<img class="thumb" src="' + esc(u) + '" alt="">');
-    return '<div class="f"><span class="lab">' + esc(f.label) + '</span><div class="mf">' + prev +
+    return '<div class="f"><span class="lab">' + esc(f.label) + '</span><div class="mf" data-drop="' + path + '" data-accept="' + f.accept + '">' + prev +
+      '<small class="drophint">Arraste ' + (f.video ? 'um vídeo' : 'uma imagem') + ' para cá ou use o botão abaixo.</small>' +
       '<div class="bar2" hidden><i></i></div><div class="row">' +
       '<label class="b s" style="cursor:pointer">Enviar arquivo<input type="file" hidden accept="' + f.accept + '" data-up="' + path + '"></label>' +
       (u ? '<button class="b s r" data-a="clearMedia" data-p="' + path + '">Remover</button>' : '') + '</div>' +
@@ -183,6 +184,29 @@ app.addEventListener('click', e => {
     setDirty(true);
   } else redraw = false;
   if (redraw) { drawLeft(); drawPreview(); if (a !== 'sel') scrollTo(0, y); else document.getElementById('form').closest('.box').scrollIntoView({ block: 'start' }); }
+});
+
+// ---------- arrastar e soltar arquivos
+const dropBox = e => e.target.closest && e.target.closest('.mf[data-drop]');
+const hasFiles = e => e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
+addEventListener('dragover', e => {
+  if (!hasFiles(e)) return;
+  e.preventDefault(); // evita que o navegador abra o arquivo ao soltar fora da caixa
+  const box = dropBox(e);
+  e.dataTransfer.dropEffect = box ? 'copy' : 'none';
+  document.querySelectorAll('.mf.over').forEach(b => { if (b !== box) b.classList.remove('over'); });
+  if (box) box.classList.add('over');
+});
+addEventListener('dragleave', e => { const box = dropBox(e); if (box && !box.contains(e.relatedTarget)) box.classList.remove('over'); });
+addEventListener('drop', e => {
+  if (!hasFiles(e)) return;
+  e.preventDefault();
+  document.querySelectorAll('.mf.over').forEach(b => b.classList.remove('over'));
+  const box = dropBox(e); if (!box) return;
+  const file = e.dataTransfer.files[0]; if (!file) return;
+  const wantVideo = box.dataset.accept.startsWith('video');
+  if (!file.type.startsWith(wantVideo ? 'video/' : 'image/')) { toast(wantVideo ? 'Este campo aceita apenas vídeo.' : 'Este campo aceita apenas imagem.', 5000); return; }
+  upload(file, box.dataset.drop, box, !!box.closest('[data-root]'));
 });
 
 async function upload(file, path, box, rootLevel) {

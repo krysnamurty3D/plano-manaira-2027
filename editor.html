@@ -45,6 +45,9 @@ textarea{min-height:120px;resize:vertical;line-height:1.45}
 .item .hd strong{flex:1;font:700 15px 'Barlow Condensed',sans-serif;text-transform:uppercase;color:var(--ink2)}
 .mf{border:2px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px}
 .mf .thumb{max-height:220px;border-radius:10px;background:#0B0A2A;object-fit:contain;width:100%}
+.mf{transition:border-color .15s,background .15s}
+.mf.over{border-style:dashed;border-color:var(--sky);background:#EAF2FB}
+.mf .drophint{color:var(--ink2);font-size:13px}
 .bar2{height:8px;border-radius:4px;background:#EEF1F7;overflow:hidden}.bar2 i{display:block;height:100%;background:var(--sky);width:0}
 .pv .phone{border-radius:34px;background:#14124A;padding:12px;box-shadow:0 18px 40px rgba(20,18,74,.25)}
 .pv .screen{border-radius:24px;overflow:auto;max-height:calc(100dvh - 170px);background:#fff}
@@ -63,6 +66,6 @@ textarea{min-height:120px;resize:vertical;line-height:1.45}
 <body>
 <div id="app"><p class="loading">Carregando editor…</p></div>
 <div class="toast" id="toast" role="status"></div>
-<script type="module" src="editor.js?v=2"></script>
+<script type="module" src="editor.js?v=3"></script>
 </body>
 </html>
