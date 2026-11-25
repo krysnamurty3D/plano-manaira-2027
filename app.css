@@ -147,6 +147,12 @@ blockquote em{color:var(--yellow)}
 .closing .subt{margin:-14px 0 0;font:600 clamp(28px,8vw,36px)/1.05 'Barlow Condensed',sans-serif;text-transform:uppercase;color:var(--navy)}
 .closing .subt em{color:var(--red);font-weight:800}
 .closing .media{width:100%}
+.closing{position:relative;isolation:isolate}
+.closing>.bgm{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;z-index:-2}
+.closing>.bgshade{position:absolute;inset:0;z-index:-1}
+.closing.nofoot{padding-bottom:44px}
+.closing.light h2,.closing.light .subt,.closing.light .wordmark,.closing.light .wordmark small{color:#fff}
+.closing.light h2 em,.closing.light .subt em{color:var(--yellow)}
 .thanks{margin:0;background:var(--navy);color:#fff;font-weight:600;padding:12px 22px;border-radius:26px}
 .foot{align-self:stretch;margin:10px -22px 0;padding:56px 22px 36px;background:var(--navy);border-radius:60% 60% 0 0/40px 40px 0 0;color:#fff;display:flex;flex-direction:column;gap:4px}
 .foot strong{font:800 26px/1 'Barlow Condensed',sans-serif;letter-spacing:2px;text-transform:uppercase}

@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <title>Editor · Plano Anual 2027</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700&family=Barlow:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="app.css?v=3">
+<link rel="stylesheet" href="app.css?v=4">
 <style>
 body{background:#EEF1F7}
 .ed-top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 14px;background:var(--navy);color:#fff}
@@ -47,6 +47,8 @@ textarea{min-height:120px;resize:vertical;line-height:1.45}
 .mf .thumb{max-height:220px;border-radius:10px;background:#0B0A2A;object-fit:contain;width:100%}
 .gal{border:2px solid transparent;border-radius:14px;padding:6px;margin:-6px -6px 8px}
 .mf,.gal{transition:border-color .15s,background .15s}
+.fh{font:700 20px 'Barlow Condensed',sans-serif;text-transform:uppercase;color:var(--navy);margin:22px 0 10px;padding-top:16px;border-top:2px solid var(--line)}
+.f input[type=color]{width:48px;height:40px;border:2px solid var(--line);border-radius:10px;padding:2px;background:#fff;cursor:pointer}
 .mf.pick{border-color:var(--sky);box-shadow:0 0 0 3px #CFE3F7}
 .mf.over,.gal.over{border-style:dashed;border-color:var(--sky);background:#EAF2FB}
 .mf .drophint{color:var(--ink2);font-size:13px}
@@ -68,6 +70,6 @@ textarea{min-height:120px;resize:vertical;line-height:1.45}
 <body>
 <div id="app"><p class="loading">Carregando editor…</p></div>
 <div class="toast" id="toast" role="status"></div>
-<script type="module" src="editor.js?v=6"></script>
+<script type="module" src="editor.js?v=7"></script>
 </body>
 </html>

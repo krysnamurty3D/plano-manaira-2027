@@ -140,10 +140,14 @@ const KINDS = {
       videoBlock(p.video) + gallery(p.gallery) + '</div>';
   },
   closing(p) {
-    return '<div class="closing">' + logo('logo') +
+    const bg = safeUrl(p.bg), sh = Math.max(0, Math.min(0.9, +p.shade || 0));
+    const bgm = bg && !ytId(bg) ? (isVideoUrl(bg) ? '<video class="bgm" src="' + esc(bg) + '" autoplay muted loop playsinline aria-hidden="true"></video>' : '<img class="bgm" src="' + esc(bg) + '" alt="">') : '';
+    const col = /^#[0-9a-fA-F]{6}$/.test(p.bgColor || '') ? ' style="background:' + p.bgColor + '"' : '';
+    const cls = 'closing' + (p.tone === 'light' ? ' light' : '') + (p.foot === 'hide' ? ' nofoot' : '');
+    return '<div class="' + cls + '"' + col + '>' + bgm + (sh ? '<div class="bgshade" style="background:rgba(0,0,0,' + sh + ')"></div>' : '') + logo('logo') +
       '<h2>' + rich(p.title) + '</h2>' + (p.subtitle ? '<p class="subt">' + rich(p.subtitle) + '</p>' : '') +
       videoBlock(p.video) + gallery(p.gallery) + (p.text ? '<p class="thanks">' + rich(p.text) + '</p>' : '') +
-      '<div class="foot"><strong>Supermercado Manaíra</strong><em>Você já é de casa.</em></div></div>';
+      (p.foot === 'hide' ? '' : '<div class="foot"><strong>Supermercado Manaíra</strong><em>Você já é de casa.</em></div>') + '</div>';
   },
 };
 export const KIND_LABELS = { cover: 'Capa', story: 'Texto + cards', stats: 'Números', plan: 'Plano (preço)', benefit: 'Benefício', contact: 'Contato', closing: 'Encerramento' };

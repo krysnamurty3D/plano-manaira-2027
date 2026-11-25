@@ -1,5 +1,5 @@
 import { DEFAULT_PLAN } from './data.js?v=2';
-import { renderOne, applyTheme, esc, ICON_NAMES, KIND_LABELS, safeUrl, isVideoUrl } from './render.js?v=3';
+import { renderOne, applyTheme, esc, ICON_NAMES, KIND_LABELS, safeUrl, isVideoUrl } from './render.js?v=4';
 import { firebaseConfig, PLAN_DOC, SDK } from './config.js?v=2';
 
 const { initializeApp } = await import(SDK + 'firebase-app.js');
@@ -20,6 +20,8 @@ const IMG = (k, label) => ({ k, t: 'media', accept: 'image/*', label });
 const VID = (k, label) => ({ k, t: 'media', accept: 'video/*', label: label || 'Vídeo da página (opcional)', video: true });
 const ANY = (k, label) => ({ k, t: 'media', accept: 'image/*,video/*', label, any: true });
 const GAL = { k: 'gallery', t: 'list', gallery: true, label: 'Galeria de fotos e vídeos', add: { url: '', caption: '' }, fields: [ANY('url', 'Foto ou vídeo'), T('caption', 'Legenda (opcional)')] };
+const COLOR = (k, label, hint) => ({ k, t: 'color', label, hint });
+const SEL = (k, label, opts) => ({ k, t: 'select', label, opts });
 const ICONF = { k: 'icon', t: 'icon', label: 'Ícone' };
 const HL = 'Use *asteriscos* para destacar palavras em azul. Ex.: Nossa história é construída *todos os dias.*';
 const SCHEMA = {
@@ -38,7 +40,13 @@ const SCHEMA = {
     { k: 'plans', t: 'plans', label: 'Disponível nos planos', hint: 'Escreva o detalhe (ex.: 6 meses) ou "Incluso". Deixe vazio se o plano não tem.' },
     VID('video'), IMG('image', 'Foto ou arte (opcional)'), T('format', 'Formato (ex.: Stories 1080 × 1920)'), GAL],
   contact: [T('badge', 'Etiqueta'), T('title', 'Título', HL), TA('text', 'Texto'), T('name', 'Nome'), T('role', 'Cargo'), T('phone', 'Telefone / WhatsApp'), T('email', 'E-mail'), IMG('photo', 'Foto da pessoa (opcional)'), VID('video'), GAL],
-  closing: [T('title', 'Título'), T('subtitle', 'Subtítulo', HL), TA('text', 'Agradecimento'), VID('video'), GAL],
+  closing: [T('title', 'Título'), T('subtitle', 'Subtítulo', HL), TA('text', 'Agradecimento'), VID('video'), GAL,
+    { t: 'head', label: 'Fundo da página' },
+    COLOR('bgColor', 'Cor de fundo', 'Sem cor escolhida, o fundo é o degradê amarelo-laranja.'),
+    ANY('bg', 'Imagem ou vídeo de fundo (cobre a página inteira)'),
+    SEL('shade', 'Escurecer a imagem de fundo', { '': 'Não', '0.25': 'Um pouco', '0.45': 'Médio', '0.65': 'Bastante' }),
+    SEL('tone', 'Cor dos textos', { '': 'Escuro (azul-marinho)', light: 'Claro (branco)' }),
+    SEL('foot', 'Faixa azul do rodapé', { '': 'Mostrar', hide: 'Esconder' })],
 };
 const NEW = {
   story: { badge: 'Nova seção', eyebrow: '', title: 'Novo *título*', text: 'Escreva o texto aqui.', image: '', imageCaption: '', video: '', items: [], quote: '' },
@@ -117,6 +125,8 @@ function field(f, obj, base) {
   if (f.t === 'text') return '<div class="f"><label for="' + id + '">' + esc(f.label) + '</label><input type="text" id="' + id + '" data-p="' + path + '" value="' + esc(v) + '">' + hint + '</div>';
   if (f.t === 'area') return '<div class="f"><label for="' + id + '">' + esc(f.label) + '</label><textarea id="' + id + '" data-p="' + path + '">' + esc(v) + '</textarea>' + hint + '</div>';
   if (f.t === 'select') return '<div class="f"><label for="' + id + '">' + esc(f.label) + '</label><select id="' + id + '" data-p="' + path + '">' + Object.entries(f.opts).map(([k, n]) => '<option value="' + esc(k) + '"' + (String(v) === k ? ' selected' : '') + '>' + esc(n) + '</option>').join('') + '</select></div>';
+  if (f.t === 'head') return '<h3 class="fh">' + esc(f.label) + '</h3>';
+  if (f.t === 'color') { const ok = /^#[0-9a-fA-F]{6}$/.test(v || ''); return '<div class="f"><label for="' + id + '">' + esc(f.label) + '</label><div class="row"><input type="color" id="' + id + '" data-p="' + path + '" value="' + (ok ? esc(v) : '#FFED2E') + '"><span>' + (ok ? esc(v) : 'Degradê padrão') + '</span>' + (ok ? '<button class="b s" data-a="clearMedia" data-p="' + path + '">Voltar ao degradê</button>' : '') + '</div>' + hint + '</div>'; }
   if (f.t === 'icon') return '<div class="f"><label for="' + id + '">' + esc(f.label) + '</label><select id="' + id + '" data-p="' + path + '">' + Object.entries(ICON_NAMES).map(([k, n]) => '<option value="' + k + '"' + (v === k ? ' selected' : '') + '>' + esc(n) + '</option>').join('') + '</select></div>';
   if (f.t === 'plans') { const pl = v || {}; return '<div class="f"><span class="lab">' + esc(f.label) + '</span>' + hint + '<div class="colors">' +
     [['essencial', 'Essencial'], ['premium', 'Premium'], ['master', 'Master']].map(([k, n]) => '<div class="f"><label for="' + id + k + '">' + n + '</label><input type="text" id="' + id + k + '" data-p="' + path + '.' + k + '" value="' + esc(pl[k]) + '" placeholder="não incluso"></div>').join('') + '</div></div>'; }
@@ -170,7 +180,7 @@ app.addEventListener('change', e => {
   const t = e.target;
   if (t.dataset.many && t.files && t.files.length) uploadMany(Array.from(t.files), t.dataset.many, t.closest('.gal'));
   else if (t.dataset.up && t.files && t.files[0]) upload(t.files[0], t.dataset.up, t.closest('.mf'), !!t.closest('[data-root]'));
-  else if (t.dataset.p && /(^|\.)(title|label)$/.test(t.dataset.p)) { const y = scrollY; drawLeft(); scrollTo(0, y); }
+  else if (t.dataset.p && (/(^|\.)(title|label)$/.test(t.dataset.p) || t.type === 'color')) { const y = scrollY; drawLeft(); scrollTo(0, y); }
 });
 app.addEventListener('click', e => {
   const b = e.target.closest('[data-a]'); if (!b) return;
