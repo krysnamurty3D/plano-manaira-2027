@@ -56,16 +56,22 @@ export const safeUrl = u => {
 export const icon = (k, cls = 'ic') => '<svg class="' + cls + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[k] || ICONS.check) + '</svg>';
 
 function ytId(u) { const m = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([\w-]{6,})/.exec(u); return m ? m[1] : ''; }
-export function videoBlock(url, cls = '') {
+export const isVideoUrl = u => !!ytId(u) || /\.(mp4|webm|mov|m4v|ogv)(\?|#|$)/i.test(u);
+export function videoBlock(url, cls = '', caption = '') {
   const u = safeUrl(url); if (!u) return '';
-  const yt = ytId(u);
-  if (yt) return '<figure class="media yt ' + cls + '"><iframe src="https://www.youtube-nocookie.com/embed/' + esc(yt) + '?rel=0&playsinline=1" title="Vídeo" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></figure>';
-  return '<figure class="media ' + cls + '"><video src="' + esc(u + (u.includes('#') ? '' : '#t=0.1')) + '" controls playsinline preload="metadata"></video></figure>';
+  const yt = ytId(u), cap = caption ? '<figcaption>' + esc(caption) + '</figcaption>' : '';
+  if (yt) return '<figure class="media yt ' + cls + '"><iframe src="https://www.youtube-nocookie.com/embed/' + esc(yt) + '?rel=0&playsinline=1" title="' + esc(caption || 'Vídeo') + '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>' + cap + '</figure>';
+  return '<figure class="media ' + cls + '"><video src="' + esc(u + (u.includes('#') ? '' : '#t=0.1')) + '" controls playsinline preload="metadata"></video>' + cap + '</figure>';
 }
 function imageBlock(url, caption, cls = '') {
   const u = safeUrl(url); if (!u) return '';
   return '<figure class="media ' + cls + '"><img src="' + esc(u) + '" alt="' + esc(caption || '') + '" loading="lazy">' + (caption ? '<figcaption>' + esc(caption) + '</figcaption>' : '') + '</figure>';
 }
+// Galeria: vários vídeos e fotos, um embaixo do outro
+const gallery = list => {
+  const it = (Array.isArray(list) ? list : []).filter(g => g && safeUrl(g.url));
+  return it.length ? '<div class="gallery">' + it.map(g => isVideoUrl(g.url) ? videoBlock(g.url, '', g.caption) : imageBlock(g.url, g.caption)).join('') + '</div>' : '';
+};
 const badge = t => t ? '<div class="badge"><span>' + esc(t) + '</span></div>' : '';
 const swoosh = '<svg class="swoosh" viewBox="0 0 160 120" aria-hidden="true"><path d="M0 0h70C40 25 18 55 0 92z" fill="var(--blue2)"/><path d="M70 0h22C55 28 26 62 0 110V92C18 55 40 25 70 0z" fill="var(--red)"/><path d="M92 0h18C70 30 38 66 0 120v-10C26 62 55 28 92 0z" fill="var(--yellow)"/></svg>';
 
@@ -88,7 +94,7 @@ const KINDS = {
       '<h2>' + rich(p.title) + '</h2>' +
       imageBlock(p.image, p.imageCaption) +
       (p.text ? '<div class="body">' + paras(p.text) + '</div>' : '') +
-      videoBlock(p.video) +
+      videoBlock(p.video) + gallery(p.gallery) +
       ((p.items || []).length ? '<ul class="cards ' + ((p.items || []).some(i => i.text) ? 'cards-wide' : 'cards-mini') + '">' + p.items.map(i =>
         '<li class="card">' + '<span class="ibub">' + icon(i.icon) + '</span><div><h3>' + rich(i.title) + '</h3>' + (i.text ? '<p>' + rich(i.text) + '</p>' : '') + '</div></li>').join('') + '</ul>' : '') +
       (p.quote ? '<blockquote>' + rich(p.quote) + '</blockquote>' : '') + '</div>';
@@ -97,7 +103,7 @@ const KINDS = {
     const it = p.items || [];
     return swoosh + badge(p.badge) + '<div class="wrap">' +
       (p.eyebrow ? '<p class="eyebrow">' + esc(p.eyebrow) + '</p>' : '') + '<h2>' + rich(p.title) + '</h2>' +
-      (p.text ? '<div class="body">' + paras(p.text) + '</div>' : '') + videoBlock(p.video) +
+      (p.text ? '<div class="body">' + paras(p.text) + '</div>' : '') + videoBlock(p.video) + gallery(p.gallery) +
       '<ul class="stats">' + it.map((s, i) =>
         '<li class="stat' + (i === 0 ? ' hero' : '') + '"><span class="ibub">' + icon(s.icon) + '</span><strong>' + esc(s.value) + '</strong><span class="lbl">' + esc(s.label) + '</span>' + (s.note ? '<small>' + esc(s.note) + '</small>' : '') + '</li>').join('') + '</ul>' +
       (p.note ? '<p class="note">' + icon('check') + esc(p.note) + '</p>' : '') + '</div>';
@@ -108,7 +114,7 @@ const KINDS = {
       '<div class="plan-card tier-' + esc(p.tier || 'sky') + '"><div class="plan-top"><div><span class="kicker">Plano</span><h2>' + rich(p.title) + '</h2></div><div class="stars">' + Array(n).fill(icon('star', 'ic star')).join('') + '</div></div>' +
       '<div class="price"><span class="kicker">Investimento mensal</span><strong>' + esc(p.monthly) + '</strong></div>' +
       '<div class="annual"><span>Anual</span><strong>' + esc(p.annual) + '</strong></div>' + cta(p, 'in-card') + '</div>' +
-      videoBlock(p.video) +
+      videoBlock(p.video) + gallery(p.gallery) +
       '<h3 class="list-title">' + icon('check') + 'Benefícios <span>· ' + (p.items || []).length + ' entregas</span></h3>' +
       '<ul class="benefits">' + (p.items || []).map(i => '<li><span class="ibub">' + icon(i.icon) + '</span><div><h4>' + esc(i.title) + '</h4><p>' + rich(i.text) + '</p></div></li>').join('') + '</ul>' + cta(p, 'big') + '</div>';
   },
@@ -119,7 +125,7 @@ const KINDS = {
       '<div class="bhead"><span class="ibub big">' + icon(p.icon) + '</span><div><p class="eyebrow">' + esc(p.number) + '</p><p class="sub">' + esc(p.subtitle) + '</p></div></div>' +
       '<h2>' + rich(p.title) + '</h2>' + (p.text ? '<div class="body">' + paras(p.text) + '</div>' : '') +
       '<p class="mini">Disponível nos planos</p><ul class="chips">' + chip('essencial', 'Essencial') + chip('premium', 'Premium') + chip('master', 'Master') + '</ul>' +
-      videoBlock(p.video) + imageBlock(p.image, '') +
+      videoBlock(p.video) + imageBlock(p.image, '') + gallery(p.gallery) +
       (p.format ? '<p class="format">' + icon('image') + 'Formato: ' + esc(p.format) + '</p>' : '') + '</div>';
   },
   contact(p) {
@@ -131,12 +137,12 @@ const KINDS = {
       '<div><strong>' + esc(p.name) + '</strong><span>' + esc(p.role) + '</span></div></div>' +
       (tel ? '<a class="crow" href="https://wa.me/55' + esc(tel) + '" target="_blank" rel="noopener"><span class="ibub">' + icon('phone') + '</span><div><small>WhatsApp</small>' + esc(p.phone) + '</div></a>' : '') +
       (p.email ? '<a class="crow" href="mailto:' + esc(p.email) + '"><span class="ibub">' + icon('mail') + '</span><div><small>E-mail</small>' + esc(p.email) + '</div></a>' : '') + '</div>' +
-      videoBlock(p.video) + '</div>';
+      videoBlock(p.video) + gallery(p.gallery) + '</div>';
   },
   closing(p) {
     return '<div class="closing">' + logo('logo') +
       '<h2>' + rich(p.title) + '</h2>' + (p.subtitle ? '<p class="subt">' + rich(p.subtitle) + '</p>' : '') +
-      videoBlock(p.video) + (p.text ? '<p class="thanks">' + rich(p.text) + '</p>' : '') +
+      videoBlock(p.video) + gallery(p.gallery) + (p.text ? '<p class="thanks">' + rich(p.text) + '</p>' : '') +
       '<div class="foot"><strong>Supermercado Manaíra</strong><em>Você já é de casa.</em></div></div>';
   },
 };
