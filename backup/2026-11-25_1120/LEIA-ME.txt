@@ -1,0 +1,21 @@
+BACKUP DO PLANO ANUAL 2027 — 25/11/2026 (2º backup)
+(conteúdo salvo no editor em 25/11/2026 às 11:20, horário de Brasília)
+
+O QUE TEM AQUI
+- plano.json ......... todos os textos, preços, cores, ordem das páginas (23 páginas)
+                       e os links de cada foto/vídeo. É exatamente o que o editor salva.
+- midias/ ............ cópia de todas as fotos e vídeos que o site usa (22 arquivos).
+- mapa-links.json .... qual link do Firebase corresponde a qual arquivo da pasta midias/.
+
+O código do site (páginas, cores, editor) fica guardado no próprio GitHub,
+com todo o histórico de versões. No backup offline (.zip) ele também vem junto.
+
+O QUE NÃO ESTÁ AQUI
+- Arquivos enviados ao Firebase mas que não estão em uso no site
+  (o Firebase não permite listar arquivos sem login de administrador).
+- Seu e-mail e senha de login (ficam só no Firebase, por segurança).
+
+COMO RESTAURAR, SE PRECISAR
+Peça ajuda ao Claude, dizendo: "restaure o backup da pasta backup/2026-11-25_1120".
+Os textos são regravados a partir do plano.json; se alguma foto ou vídeo tiver
+sumido do Firebase, ela é reenviada a partir da pasta midias/.

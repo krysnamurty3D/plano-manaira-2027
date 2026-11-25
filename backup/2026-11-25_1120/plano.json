@@ -1,0 +1,697 @@
+{
+  "pages": [
+    {
+      "title": "57 anos de tradição. Um novo ano de oportunidades.",
+      "id": "capa",
+      "kind": "cover",
+      "video": "",
+      "visible": true,
+      "image": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795600602093-Capa.png?alt=media&token=a42b1fb8-cd50-4d28-a6b0-9022705fe90c"
+    },
+    {
+      "items": [
+        {
+          "text": "",
+          "title": "Tradição",
+          "icon": "clock"
+        },
+        {
+          "text": "",
+          "title": "Confiança",
+          "icon": "shield"
+        },
+        {
+          "icon": "sprout",
+          "text": "",
+          "title": "Evolução"
+        }
+      ],
+      "eyebrow": "57 anos de história",
+      "id": "quem-somos",
+      "text": "Há 57 anos, o Supermercado Manaíra faz parte da história do varejo paraibano.\n\nFundado por José Leodácio de Souza, o Seu Dedé, nasceu de uma visão empreendedora que atravessou gerações e consolidou uma trajetória marcada pelo trabalho, pela confiança e pelo compromisso com a qualidade.\n\nAo longo dessas décadas, acompanhamos a transformação dos hábitos de consumo, ampliamos nossa estrutura e diversificamos nossos serviços, sem perder a essência que nos trouxe até aqui: oferecer variedade, qualidade e uma experiência de compra que faz parte do cotidiano de milhares de famílias.\n\nHoje, seguimos evoluindo, valorizando nossas origens e investindo continuamente no desenvolvimento do supermercado.",
+      "quote": "57 anos de história, com o olhar voltado para o futuro.",
+      "title": "Nossa história é construída *todos os dias.*",
+      "badge": "Quem somos",
+      "visible": true,
+      "imageCaption": "José Leodácio de Souza · Seu Dedé, fundador",
+      "video": "",
+      "kind": "story",
+      "image": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795600789640-309259797_175199265053376_2580053326464683362_n.jpg?alt=media&token=a315119a-5ebd-434c-be8f-0cfe376b8e6f"
+    },
+    {
+      "text": "Acreditamos que uma parceria comercial deve ir além da presença de produtos nas prateleiras.\n\nPor isso, desenvolvemos o Plano Anual 2027 com o propósito de ampliar as oportunidades de divulgação e valorização das marcas que fazem parte do nosso supermercado.\n\nNossa proposta reúne estratégias de comunicação, exposição de produtos e ações promocionais que acompanham o comportamento de compra dos nossos clientes, valorizando cada marca em diferentes momentos e canais.",
+      "badge": "Nosso propósito",
+      "title": "Mais presença. *Mais visibilidade.* *Mais oportunidades.*",
+      "quote": "Queremos proporcionar aos nossos fornecedores uma presença consistente, planejada e alinhada às oportunidades comerciais do Manaíra ao longo do ano.",
+      "eyebrow": "Nosso propósito",
+      "image": "",
+      "video": "",
+      "kind": "story",
+      "id": "proposito",
+      "items": [
+        {
+          "icon": "acoes",
+          "text": "Estratégias que levam sua marca aos canais do Manaíra.",
+          "title": "Comunicação"
+        },
+        {
+          "text": "Produtos em destaque nos espaços certos da loja.",
+          "title": "Exposição",
+          "icon": "ponto"
+        },
+        {
+          "icon": "star",
+          "title": "Ações promocionais",
+          "text": "Ativações que acompanham o comportamento de compra."
+        }
+      ],
+      "visible": true,
+      "imageCaption": ""
+    },
+    {
+      "video": "",
+      "eyebrow": "Nossa força em números",
+      "note": "Obs.:Valores de exemplo",
+      "title": "Números que representam *nossa presença.*",
+      "kind": "stats",
+      "badge": "Nossa força em números",
+      "id": "numeros",
+      "text": "A relevância do Supermercado Manaíra também pode ser percebida pela movimentação de consumidores, desempenho comercial e alcance dos nossos canais de comunicação.",
+      "items": [
+        {
+          "icon": "people",
+          "note": "período e critério de contagem a confirmar",
+          "value": "+300 mil",
+          "label": "Fluxo de clientes"
+        },
+        {
+          "value": "R$ 85 mi",
+          "label": "Faturamento e volume de vendas",
+          "icon": "money",
+          "note": ""
+        },
+        {
+          "value": "48 mil",
+          "note": "",
+          "icon": "insta",
+          "label": "Seguidores no Instagram"
+        },
+        {
+          "label": "Alcance mensal no Instagram",
+          "value": "320 mil",
+          "note": "",
+          "icon": "reach"
+        },
+        {
+          "label": "Visualizações de Reels e Stories",
+          "value": "1,5 mi",
+          "icon": "eye",
+          "note": ""
+        },
+        {
+          "icon": "heart",
+          "note": "",
+          "label": "Engajamento nas redes sociais",
+          "value": "6,8%"
+        },
+        {
+          "value": "12 mil",
+          "label": "Pedidos e acessos ao delivery e ao site",
+          "icon": "bag",
+          "note": ""
+        },
+        {
+          "value": "+35%",
+          "label": "Resultados de ações e campanhas comerciais",
+          "note": "",
+          "icon": "target"
+        }
+      ],
+      "visible": true
+    },
+    {
+      "image": "",
+      "eyebrow": "Nossa presença digital",
+      "kind": "story",
+      "video": "",
+      "badge": "Presença digital",
+      "quote": "A força da nossa operação física, ampliada pela visibilidade dos nossos canais digitais.",
+      "title": "Nossa presença vai *além da loja.*",
+      "id": "presenca-digital",
+      "text": "A comunicação do Supermercado Manaíra acompanha nossos clientes dentro e fora do ambiente de compra.\n\nPor meio das redes sociais e dos nossos canais digitais, divulgamos ofertas, apresentamos novidades, valorizamos produtos e compartilhamos conteúdos que fazem parte da rotina dos consumidores.\n\nEssa presença amplia as possibilidades de divulgação dos nossos parceiros, permitindo que suas marcas estejam presentes tanto na comunicação diária do supermercado quanto nas campanhas e ações desenvolvidas ao longo do ano.",
+      "items": [
+        {
+          "icon": "reach",
+          "title": "320 mil",
+          "text": "Alcance mensal"
+        },
+        {
+          "icon": "eye",
+          "title": "1,5 mi",
+          "text": "Visualizações"
+        },
+        {
+          "title": "6,8%",
+          "text": "Engajamento",
+          "icon": "heart"
+        }
+      ],
+      "imageCaption": "Feed · Reels · Stories",
+      "visible": true
+    },
+    {
+      "items": [
+        {
+          "icon": "encarte",
+          "title": "Encarte digital",
+          "text": "Inclusão de produtos em encarte digital durante 4 dias por mês."
+        },
+        {
+          "icon": "acoes",
+          "title": "Ações internas e externas",
+          "text": "Possibilidade de participação em ativações, degustações e outras ações promocionais realizadas pelo supermercado, mediante planejamento e alinhamento prévio."
+        },
+        {
+          "icon": "radio",
+          "title": "Rádio interna",
+          "text": "Divulgação de marcas, produtos, slogans e mensagens promocionais na programação interna do supermercado."
+        },
+        {
+          "icon": "site",
+          "title": "Banner no site",
+          "text": "Exposição publicitária no site do Supermercado Manaíra durante 6 meses ao longo do ano."
+        },
+        {
+          "icon": "correlato",
+          "title": "Correlato sazonal",
+          "text": "Oportunidade de exposição de produtos em espaços promocionais, conforme o calendário comercial e a disponibilidade da loja."
+        }
+      ],
+      "annual": "R$ 36.000,00",
+      "stars": 1,
+      "badge": "Planos 2027",
+      "kind": "plan",
+      "title": "Essencial",
+      "tier": "sky",
+      "monthly": "R$ 3.000,00",
+      "visible": true,
+      "id": "plano-essencial",
+      "video": ""
+    },
+    {
+      "items": [
+        {
+          "icon": "encarte",
+          "text": "Inclusão de produtos em encarte digital durante 6 dias por mês.",
+          "title": "Encarte digital"
+        },
+        {
+          "title": "Ações internas e externas",
+          "text": "Possibilidade de participação em ativações, degustações e outras ações promocionais realizadas pelo supermercado, mediante planejamento e alinhamento prévio.",
+          "icon": "acoes"
+        },
+        {
+          "title": "Rádio interna",
+          "text": "Divulgação de marcas, produtos, slogans e mensagens promocionais na programação interna do supermercado.",
+          "icon": "radio"
+        },
+        {
+          "text": "Exposição publicitária no site do Supermercado Manaíra durante 6 meses ao longo do ano.",
+          "icon": "site",
+          "title": "Banner no site"
+        },
+        {
+          "title": "TV interna",
+          "text": "Divulgação publicitária nas TVs internas do supermercado durante os 12 meses do plano anual.",
+          "icon": "tv"
+        },
+        {
+          "title": "Telão externo",
+          "icon": "telao",
+          "text": "Exibição de conteúdos publicitários no telão externo durante os 12 meses do plano anual."
+        },
+        {
+          "text": "Oportunidade de exposição diferenciada de produtos em períodos sazonais, conforme planejamento e disponibilidade dos espaços.",
+          "title": "Ponto extra sazonal",
+          "icon": "ponto"
+        },
+        {
+          "icon": "correlato",
+          "text": "Exposição promocional de produtos em períodos estratégicos, conforme disponibilidade.",
+          "title": "Correlato sazonal"
+        },
+        {
+          "icon": "foto",
+          "title": "Foto no feed",
+          "text": "1 produção fotográfica para publicação no Instagram do Supermercado Manaíra."
+        }
+      ],
+      "stars": 2,
+      "title": "Premium",
+      "visible": true,
+      "badge": "Planos 2027",
+      "id": "plano-premium",
+      "annual": "R$ 72.000,00",
+      "video": "",
+      "kind": "plan",
+      "monthly": "R$ 6.000,00",
+      "tier": "red"
+    },
+    {
+      "annual": "R$ 240.000,00",
+      "monthly": "R$ 20.000,00",
+      "stars": 3,
+      "kind": "plan",
+      "visible": true,
+      "tier": "navy",
+      "items": [
+        {
+          "text": "Inclusão de produtos em encarte digital durante 8 dias por mês.",
+          "title": "Encarte digital",
+          "icon": "encarte"
+        },
+        {
+          "text": "Possibilidade de participação em ativações, degustações e outras ações promocionais realizadas pelo supermercado, mediante planejamento e alinhamento prévio.",
+          "title": "Ações internas e externas",
+          "icon": "acoes"
+        },
+        {
+          "title": "Rádio interna",
+          "text": "Divulgação de marcas, produtos, slogans e mensagens promocionais na programação interna do supermercado.",
+          "icon": "radio"
+        },
+        {
+          "title": "Banner no site",
+          "icon": "site",
+          "text": "Exposição publicitária no site do Supermercado Manaíra durante os 12 meses do plano anual."
+        },
+        {
+          "title": "TV interna",
+          "icon": "tv",
+          "text": "Divulgação publicitária nas TVs internas do supermercado durante os 12 meses do plano anual."
+        },
+        {
+          "icon": "telao",
+          "title": "Telão externo",
+          "text": "Exibição de conteúdos publicitários no telão externo durante os 12 meses do plano anual."
+        },
+        {
+          "title": "Correlato sazonal",
+          "icon": "correlato",
+          "text": "Exposição promocional de produtos em períodos estratégicos, conforme disponibilidade e planejamento."
+        },
+        {
+          "icon": "ponto",
+          "text": "Oportunidade de exposição diferenciada de produtos em espaços estratégicos da loja, conforme disponibilidade.",
+          "title": "Ponto extra sazonal"
+        },
+        {
+          "text": "Aplicação de comunicação visual da marca em espaços promocionais, conforme planejamento e disponibilidade.",
+          "title": "Adesivo de piso sazonal",
+          "icon": "piso"
+        },
+        {
+          "title": "Display sazonal",
+          "text": "Exposição de produtos por meio de displays promocionais, de acordo com os espaços disponíveis e o calendário comercial.",
+          "icon": "display"
+        },
+        {
+          "icon": "vitrine",
+          "text": "Destaque de produtos da marca em vitrine personalizada no site do supermercado durante 6 meses.",
+          "title": "Vitrine de produtos no site"
+        },
+        {
+          "text": "1 produção audiovisual para publicação no Instagram do Supermercado Manaíra.",
+          "title": "Vídeo no feed",
+          "icon": "video"
+        },
+        {
+          "icon": "foto",
+          "title": "Foto no feed",
+          "text": "1 produção fotográfica para publicação no Instagram do Supermercado Manaíra."
+        }
+      ],
+      "video": "",
+      "title": "Master",
+      "id": "plano-master",
+      "badge": "Planos 2027"
+    },
+    {
+      "visible": true,
+      "id": "encarte-digital",
+      "text": "Seus produtos e preços em destaque nos encartes promocionais do Manaíra, divulgados nas campanhas digitais e compartilhados com nossos clientes.",
+      "plans": {
+        "premium": "6 dias/mês",
+        "essencial": "4 dias/mês",
+        "master": "8 dias/mês"
+      },
+      "badge": "Portfólio de benefícios",
+      "icon": "encarte",
+      "subtitle": "Ofertas em campanhas digitais",
+      "number": "Benefício 01",
+      "title": "Encarte digital",
+      "format": "Stories 1080 × 1920 (9:16)",
+      "video": "",
+      "image": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795600939271-MANAIRA_DOCE_MEL_SET_1.png?alt=media&token=9db8f426-3b9b-4c6d-87a5-8d6e0e615f29",
+      "kind": "benefit"
+    },
+    {
+      "id": "foto-no-feed",
+      "plans": {
+        "premium": "1 foto",
+        "essencial": "",
+        "master": "1 foto"
+      },
+      "kind": "benefit",
+      "number": "Benefício 02",
+      "subtitle": "Foto no feed do Instagram",
+      "badge": "Portfólio de benefícios",
+      "format": "Feed 1080 × 1350 (4:5)",
+      "icon": "foto",
+      "video": "",
+      "visible": true,
+      "image": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795601296480-IMG_6167.PNG?alt=media&token=f879a45e-7afa-4348-9c56-45ef3b62924b",
+      "title": "Produção fotográfica",
+      "text": "Fotografias comerciais produzidas para divulgar seus produtos no Instagram do Supermercado Manaíra, valorizando produto, composição e a identidade da sua marca."
+    },
+    {
+      "id": "video-no-feed",
+      "text": "Vídeos comerciais que apresentam produtos e marcas nas redes sociais do Manaíra, com linguagem próxima do nosso público.",
+      "title": "Produção audiovisual",
+      "image": "",
+      "video": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795602494521-Video_By_Supermercadomanaira_Dfpgexnvr3r_.mp4?alt=media&token=0070b25b-31ed-4ba4-936b-dd4e32c2ae40",
+      "icon": "video",
+      "visible": true,
+      "badge": "Portfólio de benefícios",
+      "format": "Reels 1080 × 1920 (9:16)",
+      "subtitle": "Vídeo no feed do Instagram (Reels)",
+      "number": "Benefício 03",
+      "kind": "benefit",
+      "plans": {
+        "master": "1 vídeo",
+        "essencial": "",
+        "premium": ""
+      }
+    },
+    {
+      "visible": true,
+      "kind": "benefit",
+      "subtitle": "Ações internas e externas",
+      "video": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795611528839-Video_By_Supermercadomanaira_Dd6jpq8ssy2_.mp4?alt=media&token=b32859c3-99ca-4869-aab4-225887d5775e",
+      "id": "acoes",
+      "image": "",
+      "title": "Ações promocionais e experiências",
+      "plans": {
+        "essencial": "Incluso",
+        "master": "Incluso",
+        "premium": "Incluso"
+      },
+      "number": "Benefício 04",
+      "icon": "acoes",
+      "text": "Degustações, cafés da manhã, ativações promocionais e ações dentro e fora da loja, que aproximam sua marca dos consumidores no momento da compra.",
+      "badge": "Portfólio de benefícios",
+      "format": "Foto 3:2"
+    },
+    {
+      "title": "Comunicação em rádio interna",
+      "image": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795611639837-Untitled-1.png?alt=media&token=2cc39546-4986-4151-b9fb-aa26b056e9ff",
+      "id": "radio-interna",
+      "video": "",
+      "kind": "benefit",
+      "visible": true,
+      "badge": "Portfólio de benefícios",
+      "format": "Foto 16:9",
+      "text": "Sua marca na programação interna do supermercado: slogans, características dos produtos, ofertas e ações promocionais ao longo do dia.",
+      "subtitle": "Na programação da loja",
+      "icon": "radio",
+      "number": "Benefício 05",
+      "plans": {
+        "premium": "Incluso",
+        "master": "Incluso",
+        "essencial": "Incluso"
+      }
+    },
+    {
+      "plans": {
+        "master": "12 meses",
+        "essencial": "",
+        "premium": "12 meses"
+      },
+      "kind": "benefit",
+      "visible": true,
+      "id": "telao",
+      "badge": "Portfólio de benefícios",
+      "gallery": [
+        {
+          "caption": "",
+          "url": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795612535526-WhatsApp_Video_2026-11-14_at_15.20.02.mp4?alt=media&token=6d96fb42-b5ae-4c3b-8b3d-5fa50df2d8ce"
+        },
+        {
+          "url": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795614255648-WhatsApp_Video_2026-11-14_at_15.20.06.mp4?alt=media&token=9df2bec0-0d0f-470c-a3be-2ebebf89ddc7",
+          "caption": ""
+        }
+      ],
+      "subtitle": "Telão externo",
+      "format": "Arte 1920 × 1080 (Full HD)",
+      "icon": "telao",
+      "video": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795612490699-WhatsApp_Video_2026-11-14_at_15.20.04.mp4?alt=media&token=85231899-e3a9-4714-8378-531f51881dd3",
+      "image": "",
+      "title": "Publicidade no telão",
+      "text": "Sua campanha exibida no telão externo do Supermercado Manaíra, com grande visibilidade para quem passa pela loja.",
+      "number": "Benefício 06"
+    },
+    {
+      "title": "Publicidade em TV interna",
+      "visible": true,
+      "video": "",
+      "text": "Campanhas exibidas nas TVs instaladas no supermercado, falando com o cliente durante a jornada de compra.",
+      "image": "",
+      "id": "tv-interna",
+      "icon": "tv",
+      "number": "Benefício 07",
+      "badge": "Portfólio de benefícios",
+      "gallery": [
+        {
+          "url": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795614206954-WhatsApp_Video_2026-11-14_at_15.19.59.mp4?alt=media&token=81688627-2afa-4a63-b384-99db23e9e704",
+          "caption": ""
+        },
+        {
+          "caption": "",
+          "url": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795614214518-WhatsApp_Video_2026-11-14_at_15.20.03.mp4?alt=media&token=6f31d5ec-9cfb-48ed-9010-a45deec34819"
+        }
+      ],
+      "format": "Arte 1920 × 1080 (Full HD)",
+      "kind": "benefit",
+      "subtitle": "TVs dentro da loja",
+      "plans": {
+        "master": "12 meses",
+        "premium": "12 meses",
+        "essencial": ""
+      }
+    },
+    {
+      "visible": true,
+      "number": "Benefício 08",
+      "plans": {
+        "premium": "6 meses",
+        "essencial": "6 meses",
+        "master": "12 meses"
+      },
+      "badge": "Portfólio de benefícios",
+      "kind": "benefit",
+      "format": "Site/App 2300 × 450 · Celular 720 × 525",
+      "text": "Exposição publicitária da sua marca no site do Supermercado Manaíra, em posição de destaque para quem navega e compra online.",
+      "id": "banner-site",
+      "icon": "site",
+      "title": "Banner digital",
+      "image": "",
+      "video": "",
+      "subtitle": "Banner no site e no app"
+    },
+    {
+      "title": "Vitrine de produtos",
+      "video": "",
+      "visible": true,
+      "image": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795615142365-print-2026-11-25-13-59-02.png?alt=media&token=868fcebb-b886-44f1-b9f4-0c63ad73bdfd",
+      "kind": "benefit",
+      "format": "Captura de tela 16:9",
+      "badge": "Portfólio de benefícios",
+      "text": "Uma vitrine personalizada que agrupa os produtos da sua marca no site do supermercado, facilitando a descoberta e a compra.",
+      "id": "vitrine",
+      "number": "Benefício 09",
+      "subtitle": "Vitrine no site",
+      "icon": "vitrine",
+      "plans": {
+        "essencial": "",
+        "premium": "",
+        "master": "6 meses"
+      }
+    },
+    {
+      "text": "Seus produtos expostos em locais estratégicos da loja, além das posições habituais, nos períodos sazonais de maior movimento.",
+      "subtitle": "Ponto extra sazonal",
+      "id": "ponto-extra",
+      "plans": {
+        "essencial": "",
+        "master": "Incluso",
+        "premium": "Incluso"
+      },
+      "badge": "Portfólio de benefícios",
+      "icon": "ponto",
+      "number": "Benefício 10",
+      "visible": true,
+      "title": "Exposição em ponto extra",
+      "kind": "benefit",
+      "format": "Foto 3:4",
+      "image": "",
+      "video": "",
+      "gallery": [
+        {
+          "url": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795615597007-Ponto_Extra.png?alt=media&token=a02d09ef-5cc9-45bb-96b9-c7ac53872327",
+          "caption": ""
+        },
+        {
+          "url": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795615605023-Ponto_Extra2.png?alt=media&token=c0f868e8-5306-466b-9364-dd215f9cf45e",
+          "caption": ""
+        }
+      ]
+    },
+    {
+      "title": "Exposição de produtos correlatos",
+      "visible": true,
+      "video": "",
+      "text": "Produtos complementares expostos juntos, em espaços que favorecem a compra associada e aumentam a visibilidade da sua marca.",
+      "image": "",
+      "id": "correlatos",
+      "subtitle": "Correlato sazonal",
+      "icon": "correlato",
+      "number": "Benefício 11",
+      "badge": "Portfólio de benefícios",
+      "format": "",
+      "kind": "benefit",
+      "plans": {
+        "premium": "Incluso",
+        "master": "Incluso",
+        "essencial": "Incluso"
+      },
+      "gallery": [
+        {
+          "url": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795616266826-Sem_ti_tulo2.jpg?alt=media&token=58418853-d699-4824-96eb-fb6099d67dd0",
+          "caption": ""
+        },
+        {
+          "url": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795616272070-Sem_ti_tulo3.jpg?alt=media&token=c16866c9-6b84-49f1-9a72-33a7238ac90b",
+          "caption": ""
+        },
+        {
+          "url": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795616276732-Sem_ti_tulo4.jpg?alt=media&token=948cae05-af64-4d97-81eb-6c4824e29d9e",
+          "caption": ""
+        },
+        {
+          "url": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795616281207-Sem_ti_tulo5.jpg?alt=media&token=a71d17ed-668b-4e52-a6de-65691ab8a036",
+          "caption": ""
+        }
+      ]
+    },
+    {
+      "number": "Benefício 12",
+      "title": "Comunicação visual no ponto de venda",
+      "image": "",
+      "video": "",
+      "format": "",
+      "kind": "benefit",
+      "text": "Displays promocionais e adesivos de piso que levam a identidade da sua marca para o ambiente de compra.",
+      "badge": "Portfólio de benefícios",
+      "visible": true,
+      "subtitle": "Displays e adesivos de piso",
+      "icon": "display",
+      "plans": {
+        "essencial": "",
+        "premium": "",
+        "master": "Incluso"
+      },
+      "id": "displays-adesivos",
+      "gallery": [
+        {
+          "url": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795616322946-Sem_ti_tulo8.jpg?alt=media&token=4d39519c-a51d-4d13-ad6e-5497d8056f75",
+          "caption": ""
+        },
+        {
+          "url": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795616338330-Sem_ti_tulo.jpg?alt=media&token=79bf5ad9-6400-4b60-abc2-1e22e858d5ce",
+          "caption": ""
+        }
+      ]
+    },
+    {
+      "video": "",
+      "image": "",
+      "title": "Planejamento *e execução.*",
+      "kind": "story",
+      "eyebrow": "Condições gerais",
+      "quote": "",
+      "badge": "Condições gerais",
+      "id": "condicoes",
+      "visible": true,
+      "imageCaption": "",
+      "text": "",
+      "items": [
+        {
+          "icon": "calendar",
+          "title": "Planejamento prévio",
+          "text": "As ações e divulgações previstas nos planos serão organizadas por meio de planejamento prévio entre o Supermercado Manaíra e os fornecedores participantes."
+        },
+        {
+          "text": "As ativações presenciais e os formatos de exposição física estarão sujeitos à disponibilidade de espaço, adequação dos produtos e alinhamento do calendário comercial.",
+          "title": "Disponibilidade",
+          "icon": "store"
+        },
+        {
+          "title": "Especificações técnicas",
+          "text": "Os materiais publicitários deverão atender às especificações técnicas e aos prazos estabelecidos pelo setor de Marketing.",
+          "icon": "doc"
+        },
+        {
+          "text": "As condições comerciais e a distribuição das entregas serão formalizadas nos respectivos instrumentos contratuais.",
+          "title": "Formalização",
+          "icon": "pen"
+        }
+      ]
+    },
+    {
+      "phone": "(83) 99134-9268",
+      "text": "Fale com o nosso time de Marketing para escolher o plano ideal para a sua marca em 2027.",
+      "name": "Anny Beatriz",
+      "email": "supermercadomanairamkt@gmail.com",
+      "kind": "contact",
+      "id": "contato",
+      "visible": true,
+      "badge": "Contato",
+      "title": "Vamos construir um novo ano de *oportunidades.*",
+      "photo": "https://firebasestorage.googleapis.com/v0/b/plano-manaira-2027.firebasestorage.app/o/midias%2F1795616408825-print-2026-11-25-14-20-08.png?alt=media&token=492cb1be-1074-40b2-9f73-a3b402216fdd",
+      "video": "",
+      "role": "Gerência de Marketing"
+    },
+    {
+      "kind": "closing",
+      "subtitle": "Um futuro de *novas parcerias.*",
+      "text": "Obrigado por fazer parte da nossa história.",
+      "title": "57 anos de história.",
+      "id": "encerramento",
+      "visible": true,
+      "video": ""
+    }
+  ],
+  "brand": {
+    "logo": "assets/logo.png"
+  },
+  "title": "Plano Anual 2027 — Supermercado Manaíra",
+  "updatedAt": "2026-11-25T14:20:15.694Z",
+  "version": 1,
+  "theme": {
+    "sky": "#0A7EC2",
+    "yellow": "#FFED2E",
+    "red": "#E31E24",
+    "navy": "#1E1A6B",
+    "orange": "#F39A3E"
+  }
+}
