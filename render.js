@@ -143,6 +143,11 @@ const KINDS = {
     const bg = safeUrl(p.bg), sh = Math.max(0, Math.min(0.9, +p.shade || 0));
     const bgm = bg && !ytId(bg) ? (isVideoUrl(bg) ? '<video class="bgm" src="' + esc(bg) + '" autoplay muted loop playsinline aria-hidden="true"></video>' : '<img class="bgm" src="' + esc(bg) + '" alt="">') : '';
     const col = /^#[0-9a-fA-F]{6}$/.test(p.bgColor || '') ? ' style="background:' + p.bgColor + '"' : '';
+    if (p.hideText === '1') { // só a imagem/vídeo de fundo, inteira e no formato original
+      const full = bg && !ytId(bg) ? (isVideoUrl(bg) ? '<video class="bgfull" src="' + esc(bg) + '" autoplay muted loop playsinline></video>' : '<img class="bgfull" src="' + esc(bg) + '" alt="' + esc(String(p.title || '').replace(/\*/g, '')) + '">') : '<div class="bgempty"></div>';
+      const extra = videoBlock(p.video) + gallery(p.gallery);
+      return '<div class="closing only-bg"' + col + '>' + full + (extra ? '<div class="bgextra">' + extra + '</div>' : '') + '</div>';
+    }
     const cls = 'closing' + (p.tone === 'light' ? ' light' : '') + (p.foot === 'hide' ? ' nofoot' : '');
     return '<div class="' + cls + '"' + col + '>' + bgm + (sh ? '<div class="bgshade" style="background:rgba(0,0,0,' + sh + ')"></div>' : '') + logo('logo') +
       '<h2>' + rich(p.title) + '</h2>' + (p.subtitle ? '<p class="subt">' + rich(p.subtitle) + '</p>' : '') +

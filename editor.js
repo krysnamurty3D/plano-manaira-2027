@@ -1,5 +1,5 @@
 import { DEFAULT_PLAN } from './data.js?v=2';
-import { renderOne, applyTheme, esc, ICON_NAMES, KIND_LABELS, safeUrl, isVideoUrl } from './render.js?v=4';
+import { renderOne, applyTheme, esc, ICON_NAMES, KIND_LABELS, safeUrl, isVideoUrl } from './render.js?v=5';
 import { firebaseConfig, PLAN_DOC, SDK } from './config.js?v=2';
 
 const { initializeApp } = await import(SDK + 'firebase-app.js');
@@ -42,6 +42,7 @@ const SCHEMA = {
   contact: [T('badge', 'Etiqueta'), T('title', 'Título', HL), TA('text', 'Texto'), T('name', 'Nome'), T('role', 'Cargo'), T('phone', 'Telefone / WhatsApp'), T('email', 'E-mail'), IMG('photo', 'Foto da pessoa (opcional)'), VID('video'), GAL],
   closing: [T('title', 'Título'), T('subtitle', 'Subtítulo', HL), TA('text', 'Agradecimento'), VID('video'), GAL,
     { t: 'head', label: 'Fundo da página' },
+    SEL('hideText', 'Textos e logo', { '': 'Mostrar', '1': 'Ocultar (mostrar só a imagem de fundo, inteira, sem cortar)' }),
     COLOR('bgColor', 'Cor de fundo', 'Sem cor escolhida, o fundo é o degradê amarelo-laranja.'),
     ANY('bg', 'Imagem ou vídeo de fundo (cobre a página inteira)'),
     SEL('shade', 'Escurecer a imagem de fundo', { '': 'Não', '0.25': 'Um pouco', '0.45': 'Médio', '0.65': 'Bastante' }),
