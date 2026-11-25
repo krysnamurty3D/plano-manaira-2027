@@ -1,6 +1,6 @@
-import { DEFAULT_PLAN } from './data.js?v=1';
-import { renderOne, applyTheme, esc, ICON_NAMES, KIND_LABELS, safeUrl } from './render.js?v=1';
-import { firebaseConfig, PLAN_DOC, SDK } from './config.js?v=1';
+import { DEFAULT_PLAN } from './data.js?v=2';
+import { renderOne, applyTheme, esc, ICON_NAMES, KIND_LABELS, safeUrl } from './render.js?v=2';
+import { firebaseConfig, PLAN_DOC, SDK } from './config.js?v=2';
 
 const { initializeApp } = await import(SDK + 'firebase-app.js');
 const A = await import(SDK + 'firebase-auth.js');
@@ -30,7 +30,7 @@ const SCHEMA = {
     { k: 'items', t: 'list', label: 'Indicadores (o 1º fica em destaque)', add: { icon: 'target', value: '0', label: 'Novo indicador', note: '' }, fields: [ICONF, T('value', 'Número'), T('label', 'Descrição'), T('note', 'Observação (opcional)')] },
     T('note', 'Aviso no rodapé (opcional)')],
   plan: [T('badge', 'Etiqueta'), T('title', 'Nome do plano'), { k: 'tier', t: 'select', label: 'Cor do cartão', opts: { sky: 'Azul', red: 'Vermelho', navy: 'Azul-marinho', orange: 'Laranja' } },
-    { k: 'stars', t: 'select', label: 'Estrelas', opts: { 0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5' } }, T('monthly', 'Investimento mensal'), T('annual', 'Investimento anual'), VID('video'),
+    { k: 'stars', t: 'select', label: 'Estrelas', opts: { 0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5' } }, T('monthly', 'Investimento mensal'), T('annual', 'Investimento anual'), T('ctaLabel', 'Texto do botão do WhatsApp', 'Padrão: Contrate agora. O botão usa o telefone da página Contato.'), VID('video'),
     { k: 'items', t: 'list', label: 'Benefícios', add: { icon: 'check', title: 'Novo benefício', text: '' }, fields: [ICONF, T('title', 'Benefício'), TA('text', 'Descrição')] }],
   benefit: [T('badge', 'Etiqueta'), T('number', 'Numeração (ex.: Benefício 01)'), ICONF, T('subtitle', 'Subtítulo'), T('title', 'Título', HL), TA('text', 'Texto'),
     { k: 'plans', t: 'plans', label: 'Disponível nos planos', hint: 'Escreva o detalhe (ex.: 6 meses) ou "Incluso". Deixe vazio se o plano não tem.' },

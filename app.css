@@ -154,4 +154,10 @@ blockquote em{color:var(--yellow)}
 .wordmark b{font-size:64px;font-weight:800;letter-spacing:1px}
 .wordmark em{color:var(--red);font:italic 700 26px/1.1 'Barlow Condensed',sans-serif}
 .cover-empty .logo,.closing .logo{width:min(300px,70%)}
+.cta{display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 24px;border-radius:30px;background:#25D366;color:#073B1E;text-decoration:none;font:800 22px/1 'Barlow Condensed',sans-serif;letter-spacing:.8px;text-transform:uppercase;box-shadow:0 10px 24px rgba(7,59,30,.25)}
+.cta .ic{width:26px;height:26px}
+.cta:active{transform:scale(.98)}
+.cta:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+.cta.in-card{align-self:stretch;margin-top:4px}
+.media .vid-err{color:#fff;padding:40px 20px;text-align:center;font-size:15px}
 .loading{padding:80px 20px;text-align:center;color:var(--ink2)}

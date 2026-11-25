@@ -60,7 +60,7 @@ export function videoBlock(url, cls = '') {
   const u = safeUrl(url); if (!u) return '';
   const yt = ytId(u);
   if (yt) return '<figure class="media yt ' + cls + '"><iframe src="https://www.youtube-nocookie.com/embed/' + esc(yt) + '?rel=0&playsinline=1" title="Vídeo" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></figure>';
-  return '<figure class="media ' + cls + '"><video src="' + esc(u) + '" controls playsinline preload="metadata"></video></figure>';
+  return '<figure class="media ' + cls + '"><video src="' + esc(u + (u.includes('#') ? '' : '#t=0.1')) + '" controls playsinline preload="metadata"></video></figure>';
 }
 function imageBlock(url, caption, cls = '') {
   const u = safeUrl(url); if (!u) return '';
@@ -69,7 +69,10 @@ function imageBlock(url, caption, cls = '') {
 const badge = t => t ? '<div class="badge"><span>' + esc(t) + '</span></div>' : '';
 const swoosh = '<svg class="swoosh" viewBox="0 0 160 120" aria-hidden="true"><path d="M0 0h70C40 25 18 55 0 92z" fill="var(--blue2)"/><path d="M70 0h22C55 28 26 62 0 110V92C18 55 40 25 70 0z" fill="var(--red)"/><path d="M92 0h18C70 30 38 66 0 120v-10C26 62 55 28 92 0z" fill="var(--yellow)"/></svg>';
 
-let BRAND = {};
+let BRAND = {}, WA = '';
+const WA_ICON = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/></svg>';
+const cta = (p, cls) => { if (!WA) return ''; const msg = 'Olá! Tenho interesse no Plano ' + String(p.title || '').replace(/\*/g, '') + ' do Plano Anual 2027 do Supermercado Manaíra. Pode me passar mais informações?'; return '<a class="cta ' + cls + '" href="https://wa.me/' + WA + '?text=' + encodeURIComponent(msg) + '" target="_blank" rel="noopener">' + WA_ICON + esc(p.ctaLabel || 'Contrate agora') + '</a>'; };
+function setCtx(plan) { BRAND = (plan && plan.brand) || {}; const c = ((plan && plan.pages) || []).find(x => x.kind === 'contact' && x.phone); let d = c ? String(c.phone).replace(/\D/g, '') : ''; if (d && !d.startsWith('55')) d = '55' + d; WA = d.length >= 12 ? d : ''; }
 const logo = (cls) => { const u = safeUrl(BRAND.logo); return u ? '<img class="' + cls + '" src="' + esc(u) + '" alt="Supermercado Manaíra — Você já é de casa">' : '<div class="wordmark"><small>Supermercado</small><b>MANAÍRA</b><em>Você já é de casa</em></div>'; };
 const KINDS = {
   cover(p) {
@@ -104,10 +107,10 @@ const KINDS = {
     return swoosh + badge(p.badge) + '<div class="wrap">' +
       '<div class="plan-card tier-' + esc(p.tier || 'sky') + '"><div class="plan-top"><div><span class="kicker">Plano</span><h2>' + rich(p.title) + '</h2></div><div class="stars">' + Array(n).fill(icon('star', 'ic star')).join('') + '</div></div>' +
       '<div class="price"><span class="kicker">Investimento mensal</span><strong>' + esc(p.monthly) + '</strong></div>' +
-      '<div class="annual"><span>Anual</span><strong>' + esc(p.annual) + '</strong></div></div>' +
+      '<div class="annual"><span>Anual</span><strong>' + esc(p.annual) + '</strong></div>' + cta(p, 'in-card') + '</div>' +
       videoBlock(p.video) +
       '<h3 class="list-title">' + icon('check') + 'Benefícios <span>· ' + (p.items || []).length + ' entregas</span></h3>' +
-      '<ul class="benefits">' + (p.items || []).map(i => '<li><span class="ibub">' + icon(i.icon) + '</span><div><h4>' + esc(i.title) + '</h4><p>' + rich(i.text) + '</p></div></li>').join('') + '</ul></div>';
+      '<ul class="benefits">' + (p.items || []).map(i => '<li><span class="ibub">' + icon(i.icon) + '</span><div><h4>' + esc(i.title) + '</h4><p>' + rich(i.text) + '</p></div></li>').join('') + '</ul>' + cta(p, 'big') + '</div>';
   },
   benefit(p) {
     const pl = p.plans || {};
@@ -146,12 +149,12 @@ export function applyTheme(theme, el = document.documentElement) {
 }
 
 export function renderPlan(plan, root) {
-  BRAND = plan.brand || {};
+  setCtx(plan);
   const pages = (plan.pages || []).filter(p => p.visible !== false && KINDS[p.kind]);
   root.innerHTML = pages.map((p, i) => '<section class="pg k-' + p.kind + '" id="p-' + i + '" data-title="' + esc(p.title || p.badge || '') + '">' + KINDS[p.kind](p).replace('href="#p-1"', 'href="#p-' + (i + 1) + '"') + '</section>').join('');
   return pages;
 }
 export function renderOne(page, plan) {
-  BRAND = (plan && plan.brand) || {};
+  setCtx(plan);
   return KINDS[page.kind] ? '<section class="pg k-' + page.kind + '">' + KINDS[page.kind](page) + '</section>' : '';
 }
