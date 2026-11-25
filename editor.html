@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Editor · Plano Anual 2027</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700&family=Barlow:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="app.css">
+<style>
+body{background:#EEF1F7}
+.ed-top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 14px;background:var(--navy);color:#fff}
+.ed-top .t{flex:1;font:700 20px/1 'Barlow Condensed',sans-serif}
+.ed-top .t b{color:var(--yellow)}
+.b{height:44px;padding:0 16px;border:0;border-radius:22px;font:600 15px 'Barlow',sans-serif;cursor:pointer;background:#fff;color:var(--navy);display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.b:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.b.y{background:var(--yellow)}.b.r{background:#fff0f0;color:#B3141A}.b.g{background:rgba(255,255,255,.14);color:#fff}
+.b.s{height:36px;padding:0 12px;font-size:14px;background:#EEF1F7}
+.b[disabled]{opacity:.45;cursor:default}
+.dot{width:10px;height:10px;border-radius:50%;background:#E31E24;display:none}.dirty .dot{display:inline-block}
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;padding:16px;max-width:1280px;margin:0 auto}
+@media(min-width:1000px){.layout{grid-template-columns:minmax(0,1fr) 420px}.pv{position:sticky;top:76px;align-self:start}}
+.box{background:#fff;border-radius:18px;padding:18px;box-shadow:0 4px 16px rgba(30,26,107,.06);margin-bottom:16px}
+.box h2{font-size:24px;margin-bottom:12px;text-transform:uppercase}
+.pages{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.pages li{display:flex;align-items:center;gap:6px;border:2px solid var(--line);border-radius:14px;padding:6px 6px 6px 12px}
+.pages li.sel{border-color:var(--sky);background:#EAF2FB}
+.pages li.hid .nm{opacity:.45;text-decoration:line-through}
+.pages .nm{flex:1;background:none;border:0;text-align:left;font:600 15px 'Barlow',sans-serif;color:var(--ink);cursor:pointer;min-height:40px;display:flex;gap:8px;align-items:center}
+.pages .nm span{font:800 15px 'Barlow Condensed',sans-serif;color:var(--red);width:22px}
+.pages .nm small{color:var(--ink2);font-weight:500}
+.ico{width:36px;height:36px;border:0;border-radius:10px;background:#EEF1F7;color:var(--navy);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:16px}
+.ico:hover{background:#DDE5F3}
+.f{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.f label,.lab{font:700 14px 'Barlow',sans-serif;color:var(--ink)}
+.f small{color:var(--ink2);font-size:13px}
+input[type=text],input[type=email],input[type=password],textarea,select{font:16px 'Barlow',sans-serif;padding:11px 12px;border:2px solid var(--line);border-radius:12px;color:var(--ink);background:#fff;width:100%}
+textarea{min-height:120px;resize:vertical;line-height:1.45}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.colors{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.colors label{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px}
+.colors input{width:44px;height:44px;border:0;padding:0;background:none;cursor:pointer}
+.item{border:2px dashed var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.item .hd{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.item .hd strong{flex:1;font:700 15px 'Barlow Condensed',sans-serif;text-transform:uppercase;color:var(--ink2)}
+.mf{border:2px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.mf .thumb{max-height:220px;border-radius:10px;background:#0B0A2A;object-fit:contain;width:100%}
+.bar2{height:8px;border-radius:4px;background:#EEF1F7;overflow:hidden}.bar2 i{display:block;height:100%;background:var(--sky);width:0}
+.pv .phone{border-radius:34px;background:#14124A;padding:12px;box-shadow:0 18px 40px rgba(20,18,74,.25)}
+.pv .screen{border-radius:24px;overflow:auto;max-height:calc(100dvh - 170px);background:#fff}
+.pv .screen main{box-shadow:none}
+.pv h3{font:700 16px 'Barlow',sans-serif;margin:0 0 10px;color:var(--ink2)}
+.login{max-width:400px;margin:10vh auto;background:#fff;border-radius:22px;padding:28px;box-shadow:0 18px 40px rgba(20,18,74,.12)}
+.login img{width:160px;margin:0 auto 14px}
+.login h1{font-size:30px;text-transform:uppercase;text-align:center;margin-bottom:18px}
+.msg{min-height:22px;color:#B3141A;font-size:14px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:50;background:var(--navy);color:#fff;font-weight:600;padding:12px 20px;border-radius:24px;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none;max-width:calc(100vw - 32px);text-align:center}
+.toast.show{display:block}
+.warn{background:#FFF8D6;color:#6B5300;border-radius:14px;padding:12px 14px;font-size:14px;margin-bottom:16px}
+.hint{font-size:13px;color:var(--ink2);margin:-6px 0 12px}
+</style>
+</head>
+<body>
+<div id="app"><p class="loading">Carregando editor…</p></div>
+<div class="toast" id="toast" role="status"></div>
+<script type="module" src="editor.js?v=1"></script>
+</body>
+</html>

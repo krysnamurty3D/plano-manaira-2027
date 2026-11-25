@@ -1,0 +1,33 @@
+SITE DO PLANO ANUAL 2027 — COMO PUBLICAR (GitHub Pages + Firebase)
+
+=== 1. REGRAS DE SEGURANÇA NO FIREBASE (uma vez) ===
+a) Firestore Database > aba "Regras": apague tudo, cole o conteúdo do arquivo
+   firestore.rules e clique em "Publicar".
+b) Storage > aba "Regras": apague tudo, cole o conteúdo de storage.rules e "Publicar".
+c) Authentication > Configurações > Ações do usuário: DESMARQUE "Ativar criação
+   (inscrição)" e salve. Assim só o usuário que você cadastrou consegue editar.
+
+=== 2. PUBLICAR NO GITHUB PAGES ===
+a) github.com > "+" (canto superior) > New repository.
+   Nome: plano-manaira-2027 · marque "Public" · Create repository.
+b) Na página do repositório: "uploading an existing file".
+   Arraste TODOS os arquivos e a pasta "assets" desta pasta (não a pasta-mãe).
+   Clique em "Commit changes".
+c) Settings > Pages > Source: "Deploy from a branch" · Branch: main · / (root) · Save.
+d) Em 1 a 2 minutos aparece o link, no formato:
+   https://SEU-USUARIO.github.io/plano-manaira-2027/
+   - Site público (para compartilhar):   .../plano-manaira-2027/
+   - Editor (só você, com login):        .../plano-manaira-2027/editor.html
+
+=== 3. LIBERAR O DOMÍNIO NO LOGIN ===
+Firebase > Authentication > Configurações > Domínios autorizados > "Adicionar domínio":
+   SEU-USUARIO.github.io
+
+=== 4. PRIMEIRO USO DO EDITOR ===
+Abra editor.html, entre com o e-mail/senha cadastrados e clique em "Salvar".
+A partir daí, tudo o que você salvar aparece no site público.
+
+Dicas:
+- Use *asteriscos* para destacar palavras em azul nos títulos.
+- Vídeos: ideal até 50 MB (MP4, 1080p). Também dá para colar link do YouTube.
+- Os números da página "Nossa força em números" são EXEMPLOS: troque antes de compartilhar.

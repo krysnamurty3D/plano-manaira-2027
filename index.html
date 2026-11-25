@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plano Anual 2027 — Supermercado Manaíra</title>
+<meta name="description" content="57 anos de tradição. Um novo ano de oportunidades para a sua marca no Supermercado Manaíra.">
+<meta property="og:title" content="Plano Anual 2027 — Supermercado Manaíra">
+<meta property="og:description" content="57 anos de tradição. Um novo ano de oportunidades.">
+
+<meta property="og:image" content="assets/capa-share.jpg">
+<meta name="theme-color" content="#1E1A6B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700&family=Barlow:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <span class="t"><b>Plano Anual</b> 2027</span>
+  <button type="button" id="menuBtn" aria-expanded="false" aria-controls="menu">
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Páginas
+  </button>
+</header>
+<div class="progress" id="progress"></div>
+<nav class="menu" id="menu" aria-label="Páginas do plano"></nav>
+<main id="plan"><p class="loading">Carregando o plano…</p></main>
+<script type="module">
+import { DEFAULT_PLAN } from './data.js?v=1';
+import { renderPlan, applyTheme, esc } from './render.js?v=1';
+import { firebaseConfig, PLAN_DOC, SDK } from './config.js?v=1';
+{
+  const root = document.getElementById('plan');
+  const menu = document.getElementById('menu'), menuBtn = document.getElementById('menuBtn');
+  async function load() {
+    try {
+      const { initializeApp } = await import(SDK + 'firebase-app.js');
+      const { getFirestore, doc, getDoc } = await import(SDK + 'firebase-firestore-lite.js');
+      const db = getFirestore(initializeApp(firebaseConfig));
+      const snap = await Promise.race([getDoc(doc(db, ...PLAN_DOC)), new Promise((_, r) => setTimeout(() => r(new Error('timeout')), 8000))]);
+      if (snap.exists() && Array.isArray(snap.data().pages)) return snap.data();
+    } catch (e) { console.warn('Usando conteúdo padrão:', e && e.message); }
+    return DEFAULT_PLAN;
+  }
+  const plan = await load();
+  applyTheme(plan.theme);
+  const pages = renderPlan(plan, root);
+  const names = pages.map(p => p.kind === 'cover' ? 'Capa' : (p.kind === 'plan' ? 'Plano ' : '') + String(p.title || p.badge || '').replace(/\*/g, ''));
+  menu.innerHTML = names.map((n, i) => '<a href="#p-' + i + '"><span>' + String(i + 1).padStart(2, '0') + '</span>' + esc(n) + '</a>').join('');
+  menuBtn.addEventListener('click', () => { const o = menu.classList.toggle('open'); menuBtn.setAttribute('aria-expanded', o); });
+  menu.addEventListener('click', e => { if (e.target.closest('a')) { menu.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); } });
+  document.addEventListener('click', e => { if (!e.target.closest('#menu,#menuBtn')) { menu.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); } });
+  const bar = document.getElementById('progress');
+  const onScroll = () => { const h = document.documentElement.scrollHeight - innerHeight; bar.style.width = (h > 0 ? scrollY / h * 100 : 0) + '%'; };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  // pausa vídeos que saem da tela
+  const io = new IntersectionObserver(es => es.forEach(en => { if (!en.isIntersecting) en.target.pause(); }), { threshold: 0.1 });
+  root.querySelectorAll('.media video').forEach(v => io.observe(v));
+  if (location.hash) document.querySelector(location.hash.replace(/[^#\w-]/g, ''))?.scrollIntoView();
+}
+</script>
+</body>
+</html>
