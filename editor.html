@@ -47,6 +47,7 @@ textarea{min-height:120px;resize:vertical;line-height:1.45}
 .mf .thumb{max-height:220px;border-radius:10px;background:#0B0A2A;object-fit:contain;width:100%}
 .gal{border:2px solid transparent;border-radius:14px;padding:6px;margin:-6px -6px 8px}
 .mf,.gal{transition:border-color .15s,background .15s}
+.mf.pick{border-color:var(--sky);box-shadow:0 0 0 3px #CFE3F7}
 .mf.over,.gal.over{border-style:dashed;border-color:var(--sky);background:#EAF2FB}
 .mf .drophint{color:var(--ink2);font-size:13px}
 .bar2{height:8px;border-radius:4px;background:#EEF1F7;overflow:hidden}.bar2 i{display:block;height:100%;background:var(--sky);width:0}
@@ -67,6 +68,6 @@ textarea{min-height:120px;resize:vertical;line-height:1.45}
 <body>
 <div id="app"><p class="loading">Carregando editor…</p></div>
 <div class="toast" id="toast" role="status"></div>
-<script type="module" src="editor.js?v=5"></script>
+<script type="module" src="editor.js?v=6"></script>
 </body>
 </html>

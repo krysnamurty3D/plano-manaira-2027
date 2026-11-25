@@ -89,6 +89,9 @@ function shell() {
 }
 
 function drawLeft() {
+  drawLeftInner(); markPasteTarget();
+}
+function drawLeftInner() {
   const L = document.getElementById('left');
   const p = plan.pages[sel];
   L.innerHTML =
@@ -122,7 +125,7 @@ function field(f, obj, base) {
     const vid = f.video || (f.any && isVideoUrl(u));
     const prev = !u ? '<small>Nenhum arquivo.</small>' : (vid ? (/youtu/.test(u) ? '<small>YouTube: ' + esc(u) + '</small>' : '<video class="thumb" src="' + esc(u) + '" controls playsinline preload="metadata"></video>') : '<img class="thumb" src="' + esc(u) + '" alt="">');
     return '<div class="f"><span class="lab">' + esc(f.label) + '</span><div class="mf" data-drop="' + path + '" data-accept="' + f.accept + '">' + prev +
-      '<small class="drophint">Arraste ' + (f.any ? 'uma foto ou um vídeo' : f.video ? 'um vídeo' : 'uma imagem') + ' para cá ou use o botão abaixo.</small>' +
+      '<small class="drophint">Arraste ' + (f.any ? 'uma foto ou um vídeo' : f.video ? 'um vídeo' : 'uma imagem') + ' para cá ou use o botão abaixo.' + (f.video ? '' : ' Para colar um print: clique aqui e aperte Ctrl+V.') + '</small>' +
       '<div class="bar2" hidden><i></i></div><div class="row">' +
       '<label class="b s" style="cursor:pointer">Enviar arquivo<input type="file" hidden accept="' + f.accept + '" data-up="' + path + '"></label>' +
       (u ? '<button class="b s r" data-a="clearMedia" data-p="' + path + '">Remover</button>' : '') + '</div>' +
@@ -131,7 +134,7 @@ function field(f, obj, base) {
   if (f.t === 'list') {
     const arr = Array.isArray(v) ? v : [];
     return '<div class="f' + (f.gallery ? ' gal" data-gallery="' + path : '') + '"><span class="lab">' + esc(f.label) + ' (' + arr.length + ')</span>' +
-      (f.gallery ? '<small>Adicione quantas fotos e vídeos quiser. Eles aparecem nesta ordem, um embaixo do outro. Para adicionar vários de uma vez, arraste todos juntos para qualquer lugar desta página do editor.</small>' : '') + arr.map((it, j) =>
+      (f.gallery ? '<small>Adicione quantas fotos e vídeos quiser. Eles aparecem nesta ordem, um embaixo do outro. Para adicionar vários de uma vez, arraste todos juntos para qualquer lugar desta página do editor. Para colar um print, aperte Ctrl+V (sem clicar em nenhum campo de foto).</small>' : '') + arr.map((it, j) =>
       '<div class="item"><div class="hd"><strong>' + (j + 1) + '. ' + esc(String(it.title || it.label || it.caption || (f.gallery ? (isVideoUrl(it.url || '') ? 'Vídeo' : it.url ? 'Foto' : 'Vazio') : '')).replace(/\*/g, '')) + '</strong>' +
       '<button class="ico" data-a="iup" data-p="' + path + '" data-j="' + j + '" aria-label="Subir">↑</button><button class="ico" data-a="idown" data-p="' + path + '" data-j="' + j + '" aria-label="Descer">↓</button><button class="ico" data-a="idel" data-p="' + path + '" data-j="' + j + '" aria-label="Remover">✕</button></div>' +
       f.fields.map(sf => field(sf, it, path + '.' + j + '.')).join('') + '</div>').join('') +
@@ -228,6 +231,40 @@ addEventListener('drop', e => {
   const file = files[0];
   if (!okType(file, box.dataset.accept)) { const a = box.dataset.accept; toast(a.includes(',') ? 'Este campo aceita foto ou vídeo.' : a.startsWith('video') ? 'Este campo aceita apenas vídeo.' : 'Este campo aceita apenas imagem.', 5000); return; }
   upload(file, box.dataset.drop, box, !!box.closest('[data-root]'), null, files.length > 1 ? ' (Este campo aceita só 1 arquivo: enviei apenas "' + file.name + '".)' : '');
+});
+
+// ---------- colar imagem (Ctrl+V / Cmd+V)
+// destino: o último campo de foto clicado; se nenhum, a galeria da página
+let pasteTarget = null; // { path, root, page }
+function markPasteTarget() {
+  document.querySelectorAll('.mf.pick').forEach(b => b.classList.remove('pick'));
+  if (!pasteTarget || (!pasteTarget.root && pasteTarget.page !== plan.pages[sel])) { pasteTarget = null; return; }
+  const sc = pasteTarget.root ? '[data-root] ' : '#form ';
+  const box = document.querySelector(sc + '.mf[data-drop="' + pasteTarget.path + '"]');
+  if (box) box.classList.add('pick'); else pasteTarget = null;
+}
+app.addEventListener('pointerdown', e => {
+  const box = e.target.closest('.mf[data-drop]');
+  if (box && box.dataset.accept.includes('image')) pasteTarget = { path: box.dataset.drop, root: !!box.closest('[data-root]'), page: plan.pages[sel] };
+  else if (!e.target.closest('.mf')) pasteTarget = null;
+  markPasteTarget();
+});
+addEventListener('paste', e => {
+  if (!plan || !document.getElementById('form')) return;
+  const files = Array.from((e.clipboardData && e.clipboardData.files) || []).filter(f => okType(f, 'image/*,video/*'));
+  if (!files.length) return; // texto comum: cola normalmente
+  e.preventDefault();
+  const stamp = new Date().toISOString().slice(0, 19).replace(/[T:]/g, '-');
+  const named = files.map((f, i) => new File([f], 'print-' + stamp + (files.length > 1 ? '-' + (i + 1) : '') + '.' + ((f.type.split('/')[1] || 'png').replace('jpeg', 'jpg')), { type: f.type }));
+  const t = pasteTarget && (pasteTarget.root || pasteTarget.page === plan.pages[sel]) ? pasteTarget : null;
+  if (t && named.length === 1) {
+    const sc = t.root ? '[data-root] ' : '#form ';
+    const box = document.querySelector(sc + '.mf[data-drop="' + t.path + '"]');
+    if (box && okType(named[0], box.dataset.accept)) { upload(named[0], t.path, box, t.root); return; }
+  }
+  const gal = document.querySelector('#form .gal[data-gallery]');
+  if (gal) { uploadMany(named, gal.dataset.gallery, gal); return; }
+  toast('Esta página não tem galeria. Clique primeiro no campo da foto e depois cole (Ctrl+V).', 6000);
 });
 
 function upload(file, path, box, rootLevel, onDone, note = '') {
