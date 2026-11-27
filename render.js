@@ -111,9 +111,11 @@ const KINDS = {
   plan(p) {
     const n = Math.max(0, Math.min(5, +p.stars || 0));
     return swoosh + badge(p.badge) + '<div class="wrap">' +
-      '<div class="plan-card tier-' + esc(p.tier || 'sky') + '"><div class="plan-top"><div><span class="kicker">Plano</span><h2>' + rich(p.title) + '</h2></div><div class="stars">' + Array(n).fill(icon('star', 'ic star')).join('') + '</div></div>' +
-      '<div class="price"><span class="kicker">Investimento mensal</span><strong>' + esc(p.monthly) + '</strong></div>' +
-      '<div class="annual"><span>Anual</span><strong>' + esc(p.annual) + '</strong></div>' + cta(p, 'in-card') + '</div>' +
+      '<div class="plan-card tier-' + esc(p.tier || 'sky') + '">' +
+        '<div class="plan-top"><div class="pc-name"><span class="kicker">Plano</span><h2>' + rich(p.title) + '</h2></div>' +
+          '<div class="pc-side">' + (n ? '<div class="stars">' + Array(n).fill(icon('star', 'ic star')).join('') + '</div>' : '') +
+          (p.annual ? '<div class="annual"><span>Anual</span><strong>' + esc(p.annual) + '</strong></div>' : '') + '</div></div>' +
+        '<div class="price-wrap"><span class="kicker">Investimento mensal</span><div class="plan-bottom"><div class="price"><strong>' + esc(p.monthly) + '</strong></div>' + cta(p, 'in-card') + '</div></div></div>' +
       videoBlock(p.video) + gallery(p.gallery) +
       '<h3 class="list-title">' + icon('check') + 'Benefícios <span>· ' + (p.items || []).length + ' entregas</span></h3>' +
       '<ul class="benefits">' + (p.items || []).map(i => '<li><span class="ibub">' + icon(i.icon) + '</span><div><h4>' + esc(i.title) + '</h4><p>' + rich(i.text) + '</p></div></li>').join('') + '</ul>' + cta(p, 'big') + '</div>';

@@ -1,5 +1,5 @@
 import { DEFAULT_PLAN } from './data.js?v=2';
-import { renderOne, applyTheme, esc, ICON_NAMES, KIND_LABELS, safeUrl, isVideoUrl } from './render.js?v=5';
+import { renderOne, applyTheme, esc, ICON_NAMES, KIND_LABELS, safeUrl, isVideoUrl } from './render.js?v=6';
 import { firebaseConfig, PLAN_DOC, SDK } from './config.js?v=2';
 
 const { initializeApp } = await import(SDK + 'firebase-app.js');
