@@ -75,10 +75,12 @@ const gallery = list => {
 const badge = t => t ? '<div class="badge"><span>' + esc(t) + '</span></div>' : '';
 const swoosh = '<svg class="swoosh" viewBox="0 0 160 120" aria-hidden="true"><path d="M0 0h70C40 25 18 55 0 92z" fill="var(--blue2)"/><path d="M70 0h22C55 28 26 62 0 110V92C18 55 40 25 70 0z" fill="var(--red)"/><path d="M92 0h18C70 30 38 66 0 120v-10C26 62 55 28 92 0z" fill="var(--yellow)"/></svg>';
 
-let BRAND = {}, WA = '';
-const WA_ICON = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/></svg>';
+let BRAND = {}, WA = '', VISIBLE = [];
+export const WA_ICON = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/></svg>';
 const cta = (p, cls) => { if (!WA) return ''; const msg = 'Olá! Tenho interesse no Plano ' + String(p.title || '').replace(/\*/g, '') + ' do Plano Anual 2027 do Supermercado Manaíra. Pode me passar mais informações?'; return '<a class="cta ' + cls + '" href="https://wa.me/' + WA + '?text=' + encodeURIComponent(msg) + '" target="_blank" rel="noopener">' + WA_ICON + esc(p.ctaLabel || 'Contrate agora') + '</a>'; };
-function setCtx(plan) { BRAND = (plan && plan.brand) || {}; const c = ((plan && plan.pages) || []).find(x => x.kind === 'contact' && x.phone); let d = c ? String(c.phone).replace(/\D/g, '') : ''; if (d && !d.startsWith('55')) d = '55' + d; WA = d.length >= 12 ? d : ''; }
+export const waLink = msg => WA ? 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg) : '';
+const norm = s => String(s || '').replace(/\*/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+function setCtx(plan) { VISIBLE = ((plan && plan.pages) || []).filter(p => p.visible !== false && KINDS[p.kind]); BRAND = (plan && plan.brand) || {}; const c = ((plan && plan.pages) || []).find(x => x.kind === 'contact' && x.phone); let d = c ? String(c.phone).replace(/\D/g, '') : ''; if (d && !d.startsWith('55')) d = '55' + d; WA = d.length >= 12 ? d : ''; }
 const logo = (cls) => { const u = safeUrl(BRAND.logo); return u ? '<img class="' + cls + '" src="' + esc(u) + '" alt="Supermercado Manaíra — Você já é de casa">' : '<div class="wordmark"><small>Supermercado</small><b>MANAÍRA</b><em>Você já é de casa</em></div>'; };
 const KINDS = {
   cover(p) {
@@ -130,6 +132,23 @@ const KINDS = {
       videoBlock(p.video) + imageBlock(p.image, '') + gallery(p.gallery) +
       (p.format ? '<p class="format">' + icon('image') + 'Formato: ' + esc(p.format) + '</p>' : '') + '</div>';
   },
+  // Comparativo: monta a tabela sozinho a partir das páginas de Plano e de Benefício
+  compare(p) {
+    const plans = VISIBLE.filter(x => x.kind === 'plan');
+    const bens = VISIBLE.map((x, i) => ({ x, i })).filter(o => o.x.kind === 'benefit');
+    const head = swoosh + badge(p.badge) + '<div class="wrap"><h2>' + rich(p.title) + '</h2>' + (p.text ? '<div class="body">' + paras(p.text) + '</div>' : '');
+    if (!plans.length || !bens.length) return head + '<p class="note">' + icon('check') + 'O comparativo aparece quando houver páginas de Plano e de Benefício visíveis.</p></div>';
+    const cols = plans.map(x => ({ key: norm(x.title), name: String(x.title || '').replace(/\*/g, ''), tier: x.tier || 'sky', monthly: x.monthly }));
+    const val = (b, c) => String(((b.plans || {})[c.key]) || '').trim();
+    const cell = v => !v ? '<td class="no"><span aria-label="Não incluso">–</span></td>'
+      : '<td class="ok">' + icon('check', 'ic ck') + (/^incluso$/i.test(v) ? '<span class="sr">Incluso</span>' : '<small>' + esc(v) + '</small>') + '</td>';
+    return head + '<div class="cmp-wrap"><table class="cmp"><thead><tr><th class="bn" scope="col">Benefício</th>' +
+      cols.map((c, j) => '<th scope="col" class="tier-' + esc(c.tier) + '"><button type="button" data-col="' + (j + 2) + '" aria-pressed="false"><span class="cn">' + esc(c.name) + '</span>' + (c.monthly ? '<span class="cp">' + esc(c.monthly) + '</span><small>por mês</small>' : '') + '</button></th>').join('') +
+      '</tr></thead><tbody>' + bens.map(({ x, i }) => '<tr><th scope="row"><a href="#p-' + i + '">' + icon(x.icon) + '<span>' + esc(String(x.title || '').replace(/\*/g, '')) + '</span></a></th>' + cols.map(c => cell(val(x, c))).join('') + '</tr>').join('') +
+      '</tbody><tfoot><tr><th scope="row">Total de benefícios</th>' + cols.map(c => '<td>' + bens.filter(o => val(o.x, c)).length + '</td>').join('') + '</tr></tfoot></table></div>' +
+      '<p class="cmp-hint">Toque no nome de um plano para destacá-lo. Toque num benefício para ver os detalhes.</p>' +
+      (p.note ? '<p class="note">' + icon('check') + esc(p.note) + '</p>' : '') + '</div>';
+  },
   contact(p) {
     const tel = String(p.phone || '').replace(/\D/g, '');
     const photo = safeUrl(p.photo);
@@ -157,7 +176,7 @@ const KINDS = {
       (p.foot === 'hide' ? '' : '<div class="foot"><strong>Supermercado Manaíra</strong><em>Você já é de casa.</em></div>') + '</div>';
   },
 };
-export const KIND_LABELS = { cover: 'Capa', story: 'Texto + cards', stats: 'Números', plan: 'Plano (preço)', benefit: 'Benefício', contact: 'Contato', closing: 'Encerramento' };
+export const KIND_LABELS = { cover: 'Capa', story: 'Texto + cards', stats: 'Números', plan: 'Plano (preço)', compare: 'Comparativo de planos', benefit: 'Benefício', contact: 'Contato', closing: 'Encerramento' };
 
 export function applyTheme(theme, el = document.documentElement) {
   const t = theme || {};

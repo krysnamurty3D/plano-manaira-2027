@@ -1,5 +1,5 @@
 import { DEFAULT_PLAN } from './data.js?v=2';
-import { renderOne, applyTheme, esc, ICON_NAMES, KIND_LABELS, safeUrl, isVideoUrl } from './render.js?v=6';
+import { renderOne, applyTheme, esc, ICON_NAMES, KIND_LABELS, safeUrl, isVideoUrl } from './render.js?v=7';
 import { firebaseConfig, PLAN_DOC, SDK } from './config.js?v=2';
 
 const { initializeApp } = await import(SDK + 'firebase-app.js');
@@ -36,6 +36,8 @@ const SCHEMA = {
   plan: [T('badge', 'Etiqueta'), T('title', 'Nome do plano'), { k: 'tier', t: 'select', label: 'Cor do cartão', opts: { sky: 'Azul', red: 'Vermelho', navy: 'Azul-marinho', orange: 'Laranja' } },
     { k: 'stars', t: 'select', label: 'Estrelas', opts: { 0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5' } }, T('monthly', 'Investimento mensal'), T('annual', 'Investimento anual'), T('ctaLabel', 'Texto do botão do WhatsApp', 'Padrão: Contrate agora. O botão usa o telefone da página Contato.'), VID('video'),
     { k: 'items', t: 'list', label: 'Benefícios', add: { icon: 'check', title: 'Novo benefício', text: '' }, fields: [ICONF, T('title', 'Benefício'), TA('text', 'Descrição')] }, GAL],
+  compare: [{ t: 'info', label: 'A tabela é montada sozinha a partir das páginas de Plano e de Benefício (campo "Disponível nos planos"). Para mudar o conteúdo dela, edite essas páginas.' },
+    T('badge', 'Etiqueta'), T('title', 'Título', HL), TA('text', 'Texto de introdução (opcional)'), T('note', 'Observação abaixo da tabela (opcional)')],
   benefit: [T('badge', 'Etiqueta'), T('number', 'Numeração (ex.: Benefício 01)'), ICONF, T('subtitle', 'Subtítulo'), T('title', 'Título', HL), TA('text', 'Texto'),
     { k: 'plans', t: 'plans', label: 'Disponível nos planos', hint: 'Escreva o detalhe (ex.: 6 meses) ou "Incluso". Deixe vazio se o plano não tem.' },
     VID('video'), IMG('image', 'Foto ou arte (opcional)'), T('format', 'Formato (ex.: Stories 1080 × 1920)'), GAL],
@@ -53,6 +55,7 @@ const NEW = {
   story: { badge: 'Nova seção', eyebrow: '', title: 'Novo *título*', text: 'Escreva o texto aqui.', image: '', imageCaption: '', video: '', items: [], quote: '' },
   stats: { badge: 'Números', eyebrow: '', title: 'Nossos *números*', text: '', video: '', items: [{ icon: 'target', value: '0', label: 'Indicador', note: '' }], note: '' },
   plan: { badge: 'Planos 2027', title: 'Novo plano', tier: 'sky', stars: 1, monthly: 'R$ 0,00', annual: 'R$ 0,00', video: '', items: [] },
+  compare: { badge: 'Planos 2027', title: 'Compare os *planos*', text: 'Veja o que cada plano inclui.', note: '' },
   benefit: { badge: 'Portfólio de benefícios', number: 'Benefício', icon: 'star', subtitle: '', title: 'Novo benefício', text: '', plans: { essencial: '', premium: '', master: '' }, format: '', image: '', video: '' },
   contact: { badge: 'Contato', title: 'Fale com a gente', text: '', name: '', role: '', phone: '', email: '', photo: '', video: '' },
   closing: { title: 'Obrigado', subtitle: '', text: '', video: '' },
@@ -112,7 +115,8 @@ function drawLeftInner() {
     '<section class="box"><h2>' + esc(pageName(p)) + '</h2><div class="row" style="margin-bottom:16px">' +
       '<button class="b s" data-a="vis">' + (p.visible === false ? 'Mostrar no site' : 'Ocultar do site') + '</button><button class="b s" data-a="dup">Duplicar</button><button class="b s r" data-a="del">Excluir página</button></div>' +
       '<div id="form">' + (SCHEMA[p.kind] || []).map(f => field(f, p, '')).join('') + '</div></section>' +
-    '<section class="box"><h2>Identidade</h2><div data-root="plan">' + field(IMG('logo', 'Logo (PNG com fundo transparente)'), plan.brand || (plan.brand = {}), 'brand.') + '</div></section>' +
+    '<section class="box"><h2>Identidade</h2><div data-root="plan">' + field(IMG('logo', 'Logo (PNG com fundo transparente)'), plan.brand || (plan.brand = {}), 'brand.') +
+      field(SEL('waFloat', 'Botão flutuante do WhatsApp (canto da tela)', { '': 'Mostrar', hide: 'Esconder' }), plan.brand, 'brand.') + '</div></section>' +
     '<section class="box"><h2>Cores do plano</h2><div class="colors">' +
       [['navy', 'Azul-marinho'], ['sky', 'Azul'], ['red', 'Vermelho'], ['yellow', 'Amarelo'], ['orange', 'Laranja']].map(([k, n]) =>
         '<label><input type="color" data-theme="' + k + '" value="' + esc((plan.theme || {})[k] || '#000000') + '">' + n + '</label>').join('') +
@@ -126,6 +130,7 @@ function field(f, obj, base) {
   if (f.t === 'text') return '<div class="f"><label for="' + id + '">' + esc(f.label) + '</label><input type="text" id="' + id + '" data-p="' + path + '" value="' + esc(v) + '">' + hint + '</div>';
   if (f.t === 'area') return '<div class="f"><label for="' + id + '">' + esc(f.label) + '</label><textarea id="' + id + '" data-p="' + path + '">' + esc(v) + '</textarea>' + hint + '</div>';
   if (f.t === 'select') return '<div class="f"><label for="' + id + '">' + esc(f.label) + '</label><select id="' + id + '" data-p="' + path + '">' + Object.entries(f.opts).map(([k, n]) => '<option value="' + esc(k) + '"' + (String(v) === k ? ' selected' : '') + '>' + esc(n) + '</option>').join('') + '</select></div>';
+  if (f.t === 'info') return '<div class="warn">' + esc(f.label) + '</div>';
   if (f.t === 'head') return '<h3 class="fh">' + esc(f.label) + '</h3>';
   if (f.t === 'color') { const ok = /^#[0-9a-fA-F]{6}$/.test(v || ''); return '<div class="f"><label for="' + id + '">' + esc(f.label) + '</label><div class="row"><input type="color" id="' + id + '" data-p="' + path + '" value="' + (ok ? esc(v) : '#FFED2E') + '"><span>' + (ok ? esc(v) : 'Degradê padrão') + '</span>' + (ok ? '<button class="b s" data-a="clearMedia" data-p="' + path + '">Voltar ao degradê</button>' : '') + '</div>' + hint + '</div>'; }
   if (f.t === 'icon') return '<div class="f"><label for="' + id + '">' + esc(f.label) + '</label><select id="' + id + '" data-p="' + path + '">' + Object.entries(ICON_NAMES).map(([k, n]) => '<option value="' + k + '"' + (v === k ? ' selected' : '') + '>' + esc(n) + '</option>').join('') + '</select></div>';
